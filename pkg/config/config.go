@@ -306,6 +306,14 @@ func (c *Config) GetBlockAdapterAzureParams() (blockparams.Azure, error) {
 		TryTimeout:       c.values.Blockstore.Azure.TryTimeout,
 	}, nil
 }
+func (c *Config) GetBlockAdapterMantaParams() (blockparams.Manta, error) {
+	return blockparams.Manta{
+		MantaUrl:     c.values.Blockstore.Manta.MantaUrl,
+		MantaUser:    c.values.Blockstore.Manta.MantaUser,
+		MantaKeyPath: c.values.Blockstore.Manta.MantaKeyPath,
+		MantaKeyID:   c.values.Blockstore.Manta.MantaKeyID,
+	}, nil
+}
 
 func (c *Config) GetAuthCacheConfig() authparams.ServiceCache {
 	return authparams.ServiceCache{

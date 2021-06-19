@@ -1,0 +1,27 @@
+---
+listen_address: "0.0.0.0:8000"
+
+database:
+  connection_string: "postgres://postgres:mysecretpassword@localhost:45432/postgres?sslmode=disable"
+
+logging:
+  format: text
+  level: DEBUG
+  output: "-"
+
+auth:
+  encrypt:
+    secret_key: "10a718b3f285d89c36e9864494cdd1507f3bc85b342df24736ea81f9a1134bcc09e90b6641"
+
+blockstore:
+  type: mantas
+  manta:
+    manta_url: https://us-east-storage.solutions.iqvia.com
+    manta_key_path: /Users/soumyanair/.ssh/id_rsa
+    manta_key_id: VJ/ylibA534S+IMArdgXVZwC2sn3jsvWFLL+8uBUPDs
+    manta_user: devops_dev
+
+gateways:
+  s3:
+    domain_name: s3.local.lakefs.io
+    region: us-east-2

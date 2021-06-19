@@ -98,6 +98,12 @@ type configuration struct {
 			CredentialsFile string `mapstructure:"credentials_file"`
 			CredentialsJSON string `mapstructure:"credentials_json"`
 		}
+		Manta *struct {
+			MantaUrl     string `mapstructure:"manta_url"`
+			MantaUser    string `mapstructure:"manta_user"`
+			MantaKeyPath string `mapstructure:"manta_key_path"`
+			MantaKeyID   string `mapstructure:"manta_key_id"`
+		}
 	}
 	Committed struct {
 		LocalCache struct {

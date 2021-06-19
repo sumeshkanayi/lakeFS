@@ -13,6 +13,7 @@ type AdapterConfig interface {
 	GetBlockAdapterS3Params() (S3, error)
 	GetBlockAdapterGSParams() (GS, error)
 	GetBlockAdapterAzureParams() (Azure, error)
+	GetBlockAdapterMantaParams() (Manta, error)
 }
 
 type Mem struct{}
@@ -37,4 +38,11 @@ type Azure struct {
 	StorageAccessKey string
 	AuthMethod       string
 	TryTimeout       time.Duration
+}
+
+type Manta struct {
+	MantaUrl     string
+	MantaUser    string
+	MantaKeyPath string
+	MantaKeyID   string
 }
