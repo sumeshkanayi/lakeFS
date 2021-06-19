@@ -14,7 +14,7 @@ auth:
     secret_key: "10a718b3f285d89c36e9864494cdd1507f3bc85b342df24736ea81f9a1134bcc09e90b6641"
 
 blockstore:
-  type: mantas
+  type: manta
   manta:
     manta_url: https://us-east-storage.solutions.iqvia.com
     manta_key_path: /Users/soumyanair/.ssh/id_rsa

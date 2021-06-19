@@ -16,6 +16,7 @@ import (
 	"github.com/treeverse/lakefs/pkg/block/azure"
 	"github.com/treeverse/lakefs/pkg/block/gs"
 	"github.com/treeverse/lakefs/pkg/block/local"
+	"github.com/treeverse/lakefs/pkg/block/manta"
 	"github.com/treeverse/lakefs/pkg/block/mem"
 	"github.com/treeverse/lakefs/pkg/block/params"
 	s3a "github.com/treeverse/lakefs/pkg/block/s3"
@@ -65,6 +66,16 @@ func BuildBlockAdapter(ctx context.Context, c params.AdapterConfig) (block.Adapt
 			return nil, err
 		}
 		return buildAzureAdapter(p)
+	case manta.BlockstoreType:
+		{
+			p, err := c.GetBlockAdapterMantaParams()
+			if err != nil {
+				return nil, err
+			}
+			return buildMantaAdapter(p)
+
+		}
+
 	default:
 		return nil, fmt.Errorf("%w '%s' please choose one of %s",
 			ErrInvalidBlockStoreType, blockstore, []string{local.BlockstoreType, s3a.BlockstoreType, azure.BlockstoreType, mem.BlockstoreType, transient.BlockstoreType, gs.BlockstoreType})
@@ -79,6 +90,17 @@ func buildLocalAdapter(params params.Local) (*local.Adapter, error) {
 	logging.Default().WithFields(logging.Fields{
 		"type": "local",
 		"path": params.Path,
+	}).Info("initialized blockstore adapter")
+	return adapter, nil
+}
+func buildMantaAdapter(params params.Manta) (*manta.Adapter, error) {
+	adapter, err := manta.NewAdapter(params.MantaUrl)
+	if err != nil {
+		return nil, fmt.Errorf("got error opening a manta adapter with path %s: %w", params.MantaUrl, err)
+	}
+	logging.Default().WithFields(logging.Fields{
+		"type": "manta",
+		"path": params.MantaUrl,
 	}).Info("initialized blockstore adapter")
 	return adapter, nil
 }
