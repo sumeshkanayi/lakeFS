@@ -2,7 +2,11 @@
 description: In order to import existing data to lakeFS, you may choose to copy it using S3 CLI or using tools like Apache DistCp.
 ---
 
-# Importing data from S3 (MVCC)
+# Importing data from S3
+
+{% hint style="warn" %}
+The following instructions are relevant for lakeFS older than v0.24.0 
+{% endhist}
 
 ## Copying using external tools
 
