@@ -15,7 +15,7 @@ Instructions for creating the database can be found on the deployment instructio
 lakeFS can be easily installed on Kubernetes using a [Helm chart](https://github.com/treeverse/charts/tree/master/charts/lakefs).
 To install lakeFS with Helm:
 
-#### Copy the Helm values file relevant to your storage provider:
+-   Copy the Helm values file relevant to your storage provider:
 
 {% tabs %}
 
@@ -64,8 +64,8 @@ lakefsConfig: |
 
 **Notes for running lakeFS on GKE**
 
-* To connect to your database, you need to use one of the ways of [connecting GKE to Cloud SQL](https://cloud.google.com/sql/docs/mysql/connect-kubernetes-engine#cloud-sql-auth-proxy-with-workload-identity).
-* To give lakeFS access to your bucket, you can start the cluster in [storage-rw](https://cloud.google.com/container-registry/docs/access-control#gke) mode. Alternatively, you can use a service account JSON string by uncommenting the `gs.credentials_json` property in the following yaml.
+- To connect to your database, you need to use one of the ways of [connecting GKE to Cloud SQL](https://cloud.google.com/sql/docs/mysql/connect-kubernetes-engine#cloud-sql-auth-proxy-with-workload-identity).
+- To give lakeFS access to your bucket, you can start the cluster in [storage-rw](https://cloud.google.com/container-registry/docs/access-control#gke) mode. Alternatively, you can use a service account JSON string by uncommenting the `gs.credentials_json` property in the following yaml.
 
 {% endtab %}
 
@@ -95,13 +95,13 @@ lakefsConfig: |
 
 {% endtabs %}
 
-#### Fill in the missing values and save the file as `conf-values.yaml`.
+-   Fill in the missing values and save the file as `conf-values.yaml`.
     For more configuration options, see our Helm chart [README](https://github.com/treeverse/charts/blob/master/charts/lakefs/README.md#custom-configuration).
 
     The `lakefsConfig` parameter is the lakeFS configuration documented [here](https://docs.lakefs.io/reference/configuration.html), but without sensitive information.
     Sensitive information like `databaseConnectionString` is given through separate parameters, and the chart will inject them into Kubernetes secrets.
 
-#### In the directory where you created `conf-values.yaml`, run the following commands:
+-   In the directory where you created `conf-values.yaml`, run the following commands:
 
     ```bash
     # Add the lakeFS repository
@@ -117,7 +117,7 @@ You should give your Kubernetes nodes access to all buckets/containers you inten
 If you can't provide such access, lakeFS can be configured to use an AWS key-pair, an Azure access key, or a Google Cloud credentials file to authenticate (part of the `lakefsConfig` YAML below).
 {% endhint %}
 
-## Load balancing
+## Load Balancing
 
 You should have a load balancer direct requests to the lakeFS server.
 Options to do so include a Kubernetes Service of type `LoadBalancer`, or a Kubernetes Ingress.
