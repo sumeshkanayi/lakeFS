@@ -12,6 +12,7 @@ or using tools like [Apache DistCp](../integrations/distcp.md#from-s3-to-lakefs)
 ## Limitations
 
 Unfortunately, copying data is not always feasible for the following reasons:
+
 1. Some data is just too big to copy.
 2. It requires you to stop making changes to the data before starting to copy.
 3. It requires you to switch to using the lakeFS endpoint in all places at once.
