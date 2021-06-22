@@ -65,7 +65,7 @@ Otherwise, add `spark.hadoop.fs.s3a.access.key` and `spark.hadoop.fs.s3a.secret.
  
 ### Using custom code (notebook/spark)
 
-Set up lakeFS Spark metadata client with the endpoint and credentials as instructed in the previous [page](./spark-client.md).
+Set up lakeFS Spark metadata client with the endpoint and credentials as instructed in the previous [page](spark-client.md).
 
 The client exposes the `Exporter` object with 3 export options:
 

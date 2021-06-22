@@ -34,7 +34,7 @@ In addition, lakeFS exposes the following metrics to help monitor your deploymen
 | s3_operation_duration_seconds    | Outgoing S3 operations (histogram) | <br/>**operation**: operation name<br/>**error**: "true" if error, "false" otherwise |
 | gs_operation_duration_seconds    | Outgoing Google Storage operations (histogram) | <br/>**operation**: operation name<br/>**error**: "true" if error, "false" otherwise |
 | azure_operation_duration_seconds | Outgoing Azure storage operations (histogram) | <br/>**operation**: operation name<br/>**error**: "true" if error, "false" otherwise |
-| go_sql_stats\_\*                 | [Go DB stats](https://golang.org/pkg/database/sql/#DB.Stats) metrics have this prefix.<br/>[dlmiddlecote/sqlstats](https://github.com/dlmiddlecote/sqlstats) is used to expose them| 
+| go_sql_stats_*                   | [Go DB stats](https://golang.org/pkg/database/sql/#DB.Stats) metrics have this prefix.<br/>[dlmiddlecote/sqlstats](https://github.com/dlmiddlecote/sqlstats) is used to expose them| 
 
 
 ## Example queries

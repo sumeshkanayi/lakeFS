@@ -39,6 +39,7 @@
   * [S3 Supported API](reference/s3.md)
   * [Configuration Reference](reference/configuration.md)
   * [Commands \(CLI\) Reference](reference/commands.md)
+  * [Spark Client](reference/spark-client.md)
   * [Exporting Data](reference/export.md)
   * [Monitoring using Prometheus](reference/monitor.md)
   * [Migrating away from lakeFS](reference/offboarding.md)
