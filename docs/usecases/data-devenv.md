@@ -23,20 +23,20 @@ Once testing is completed, and you have achieved the desired result, you can del
 
 _Creating a testing branch:_
 
-   ```shell
-   lakectl branch create \
-      lakefs://example-repo/testing-spark-3 \
-      --source lakefs://example-repo/main
-   # output:
-   # created branch 'testing-spark-3', pointing to commit ID: '~79RU9aUsQ9GLnU'
-   ```
+```shell
+lakectl branch create \
+   lakefs://example-repo/testing-spark-3 \
+   --source lakefs://example-repo/main
+# output:
+# created branch 'testing-spark-3', pointing to commit ID: '~79RU9aUsQ9GLnU'
+```
 
 _Resetting changes to a branch:_
 
-   ```shell
-   lakectl branch reset lakefs://example-repo/testing-spark-3
-   # are you sure you want to reset all uncommitted changes?: y█
-   ```
+```shell
+lakectl branch reset lakefs://example-repo/testing-spark-3
+# are you sure you want to reset all uncommitted changes?: y█
+```
 
 **Note** lakeFS version <= v0.33.1 uses '@' (instead of '/') as separator between repository and branch.
 
@@ -57,12 +57,12 @@ With lakeFS you don't need to worry about creating data paths for the experiment
 
 _Reading from and comparing branches using Spark:_
 
-   ```scala
-   val dfExperiment1 = sc.read.parquet("s3a://example-repo/experiment-1/events/by-date")
-   val dfExperiment2 = sc.read.parquet("s3a://example-repo/experiment-2/events/by-date")
+```scala
+val dfExperiment1 = sc.read.parquet("s3a://example-repo/experiment-1/events/by-date")
+val dfExperiment2 = sc.read.parquet("s3a://example-repo/experiment-2/events/by-date")
 
-   dfExperiment1.groupBy("...").count()
-   dfExperiment2.groupBy("...").count() // now we can compare the properties of the data itself
+dfExperiment1.groupBy("...").count()
+dfExperiment2.groupBy("...").count() // now we can compare the properties of the data itself
    ```
 
 ### Example 3: Reproduce - A bug in production
@@ -76,7 +76,7 @@ lakeFS allows you to open a branch of your lake from the specific merge/commit t
 
 _Reading from a historic version (a previous commit) using Spark_
 
-   ```scala
-   // represents the data as existed at commit "~79RU9aUsQ9GLnU":
-   spark.read.parquet("s3://example-repo/~79RU9aUsQ9GLnU/events/by-date")
-   ```
+```scala
+// represents the data as existed at commit "~79RU9aUsQ9GLnU":
+spark.read.parquet("s3://example-repo/~79RU9aUsQ9GLnU/events/by-date")
+```
