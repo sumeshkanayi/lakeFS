@@ -2,7 +2,6 @@
 description: lakeFS enables a safe development environment on your data lake without the need to copy or mock data
 ---
 
-
 ## Data Development Environment
 
 As part of our routine work with data we develop new code, improve and upgrade old code, upgrade infrastructures, and test new technologies. lakeFS enables a safe development environment on your data lake without the need to copy or mock data, work on the pipelines or involve DevOps.

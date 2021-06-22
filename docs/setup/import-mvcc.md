@@ -1,21 +1,8 @@
 ---
-layout: default
-title: Importing data from S3 (MVCC)
 description: In order to import existing data to lakeFS, you may choose to copy it using S3 CLI or using tools like Apache DistCp.
-parent: Setup lakeFS
-nav_exclude: true
-search_exclude: true
-has_children: false
 ---
 
-# Importing data from S3
-{: .no_toc }
-
-## Table of contents
-{: .no_toc .text-delta }
-
-1. TOC
-{:toc}
+# Importing data from S3 (MVCC)
 
 ## Copying using external tools
 
@@ -45,8 +32,9 @@ Files created or replaced through lakeFS will then be stored in the repositoryâ€
 It is important to note that due to the deduplication feature of lakeFS, data will stay in your original bucket even
 when accessing it through other branches. In a sense, your original bucket becomes an initial snapshot of your data.
 
+{% hint style="info" %}
 **Note:** lakeFS will never make any changes to the import source bucket.
-{: .note .pb-3 }
+{% endhint %}
 
 ### Prerequisites
 
@@ -92,17 +80,14 @@ lakefs import --with-merge lakefs://example-repo -m s3://example-bucket/path/to/
 
 #### Notes
 
-{: .no_toc }
 1. Perform the import from a machine with access to your database, and on the same region of your destination bucket.
-
 1. You can download the `lakefs` binary from [here](https://github.com/treeverse/lakeFS/releases). Make sure you choose one compatible with your installation of lakeFS.
-
 1. Use a configuration file like the one used to start your lakeFS installation. This will be used to access your database. An example can be found [here](http://localhost:4000/reference/configuration.html#example-aws-deployment).
-
 1. lakeFS version <= v0.33.1 uses '@' (instead of '/') as separator between repository and branch/ref.
 
+{% hint style="info" %}
 **Warning:** the *import-from-inventory* branch should only be used by lakeFS. You should not make any operations on it.
-{: .note } 
+{% endhint %}
 
 ### Gradual Import
 

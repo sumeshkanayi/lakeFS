@@ -1,22 +1,14 @@
 ---
-layout: default
-title: Create a Repository
 description: This section outlines how to setup your environment once lakeFS is configured and running
-parent: Setup lakeFS
-nav_order: 10
-has_children: false
-redirect_from:
-   - ../deploying-aws/setup.html
 ---
 
 # Create a Repository
 
 ## Create the first user
 
-Once we have lakeFS configured and running, open `https://<OPENAPI_SERVER_ENDPOINT>/setup` (e.g. [https://lakefs.example.com](https://lakefs.example.com){: target="_blank" }).
+Once we have lakeFS configured and running, open `https://<OPENAPI_SERVER_ENDPOINT>/setup` (e.g. [https://lakefs.example.com](https://lakefs.example.com)).
 
 Note: If you already have lakeFS credentials, skip to step 2 and login.
-{: .note .pb-3 }
 
 1. Follow the steps to create an initial administrator user. Save the credentials you've received somewhere safe, you won't be able to see them again!
 

@@ -1,6 +1,5 @@
 ---
 description: lakeFS helps you continuously validate expectations and assumptions from the data itself.
-nav_order: 45
 ---
 
 ## Continuous Deployment
@@ -34,9 +33,9 @@ You can run quality tests for each merge (as presented in Example 1). Alas, test
 
 _Rolling back a branch to a previous commit using the CLI_
 
-   ```shell
-   lakectl branch reset lakefs://example-repo/stream-1 --commit ~79RU9aUsQ9GLnU
-   ```
+```bash
+lakectl branch reset lakefs://example-repo/stream-1 --commit ~79RU9aUsQ9GLnU
+```
 
 **Note** lakeFS version <= v0.33.1 uses '@' (instead of '/') as separator between repository and branch.
 

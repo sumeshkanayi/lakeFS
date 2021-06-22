@@ -17,17 +17,17 @@
   * [On Kubernetes](deploy/k8s.md)
   * [On Docker](deploy/docker.md)
 
-* [Setup](setup/index.md)
-  * [storage](setup/storage/README.md)
-    * [Prepare Your Blob Storage Container](setup/storage/blob.md)
-    * [Prepare Your GCS Bucket](setup/storage/gcs.md)
-    * [Prepare Your Storage](setup/storage/index.md)
-    * [Prepare Your AWS S3 Bucket](setup/storage/s3.md)
-  * [index](setup/index.md)
+* Setup
+  * [Prepare Your Storage](setup/index.md)
+    * [Blob Storage Container](setup/storage/blob.md)
+    * [GCS Bucket](setup/storage/gcs.md)
+    * [Storage](setup/storage/index.md)
+    * [AWS S3 Bucket](setup/storage/s3.md)
+  * [Create a Repository](setup/create-repo.md)
+  * [Import](setup/import.md)
+  * [Hooks](setup/hooks.md)
+
   * [Importing data from S3](setup/import-mvcc.md)
-  * [Configurable Hooks](setup/hooks.md)
-  * [import](setup/import.md)
-  * [create-repo](setup/create-repo.md)
 
 * Use Cases
   * [Data Development Environment](usecases/data-devenv.md)

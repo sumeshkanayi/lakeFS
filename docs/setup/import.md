@@ -1,23 +1,10 @@
 ---
-layout: default
-title: Import data into lakeFS 
 description: In order to import existing data to lakeFS, you may choose to copy it using S3 CLI or using tools like Apache DistCp.
-parent: Setup lakeFS
-nav_order: 20
-has_children: false
-redirect_from: ../reference/import.html
 ---
-This page describes importing from versions >= v0.24.0. For ealier versions, see [mvcc import](import-mvcc.md)
-{: .note .pb-3 }
+
+This page describes importing from versions >= v0.24.0. For ealier versions, see [MVCC import](import-mvcc.md)
 
 # Import data into lakeFS
-{: .no_toc }
-
-## Table of contents
-{: .no_toc .text-delta }
-
-1. TOC
-{:toc}
 
 ## Copying using external tools
 
@@ -25,10 +12,11 @@ In order to import existing data to lakeFS, you may choose to copy it using [S3 
 or using tools like [Apache DistCp](../integrations/distcp.md#from-s3-to-lakefs). This is the most straightforward way, and we recommend it if itâ€™s applicable for you.
 
 ## Limitations
+
 Unfortunately, copying data is not always feasible for the following reasons:
 1. Some data is just too big to copy.
-2. It requires you to stop making changes to the data before starting to copy.
-3. It requires you to switch to using the lakeFS endpoint in all places at once.
+1. It requires you to stop making changes to the data before starting to copy.
+1. It requires you to switch to using the lakeFS endpoint in all places at once.
 
 ## Importing data from an object store without actually copying it
 
@@ -44,18 +32,18 @@ For this to work, we'd need to ensure 2 things first:
 
 ### Running lakectl ingest with S3 as the source
 
-```shell
+```bash
 lakectl ingest \
   --from s3://bucket/optional/prefix/ \
   --to lakefs://my-repo/ingest-branch/optional/path/
 ```
 
 The `lakectl ingest` command will attempt to use the current user's existing credentials and will respect instance profiles, 
-environment variables and credential files [in the same way that the AWS cli does](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html){: target="_blank" }
+environment variables and credential files [in the same way that the AWS cli does](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html)
 
 ### Running lakectl ingest with Azure Blob storage as the source
 
-```shell
+```bash
 export AZURE_STORAGE_ACCOUNT="storageAccountName"
 export AZURE_STORAGE_ACCESS_KEY="EXAMPLEroozoo2gaec9fooTieWah6Oshai5Sheofievohthapob0aidee5Shaekahw7loo1aishoonuuquahr3=="
 lakectl ingest \
@@ -65,12 +53,13 @@ lakectl ingest \
 
 The `lakectl ingest` command currently supports storage accounts configured through environment variables as shown above.
 
+{% hint style="info" %}
 **Note:** Currently `lakectl import` supports the `http://` and `https://` schemes for Azure storage URIs. `wasb`, `abfs` or `adls` are currently not supported.
-{: .note }
+{% endhint %}
 
 ### Running lakectl ingest with Google Cloud storage as the source
 
-```shell
+```bash
 export GOOGLE_APPLICATION_CREDENTIALS="$HOME/.gcs_credentials.json"  # Optional, will fallback to the default configured credentials
 lakectl ingest \
    --from gs://bucket/optional/prefix/ \
@@ -83,7 +72,6 @@ The `lakectl ingest` command currently supports the standard `GOOGLE_APPLICATION
 
 Importing a very large amount of objects (> ~250M) might take some time using `lakectl ingest` as described above,
 since it has to paginate through all the objects in the source using API calls.
-
 For S3, we provide a utility as part of the `lakefs` binary, called `lakefs import`.
 
 The lakeFS import tool will use the [S3 Inventory](https://docs.aws.amazon.com/AmazonS3/latest/dev/storage-inventory.html) feature to create lakeFS metadata.
@@ -98,10 +86,12 @@ Files created or replaced through lakeFS will then be stored in the repositoryâ€
 It is important to note that due to the deduplication feature of lakeFS, data will stay in your original bucket even
 when accessing it through other branches. In a sense, your original bucket becomes an initial snapshot of your data.
 
+{% hint style="info" %}
 **Note:** lakeFS will never make any changes to the import source bucket.
-{: .note .pb-3 }
+{% endhint %}
 
 ### Prerequisites
+
 - Your bucket should have S3 Inventory enabled.
 - The inventory should be in Parquet or ORC format.
 - The inventory must contain (at least) the size, last-modified-at, and e-tag columns.
@@ -109,6 +99,7 @@ when accessing it through other branches. In a sense, your original bucket becom
 - If you want to use the tool for [gradual import](#gradual-import), you should not delete the data for the most recently imported inventory, until a more recent inventory is successfully imported.
 
 ### Using the import tool
+
 Import is performed by `lakefs` 's `import` command.
 
 Assuming your manifest.json is at `s3://example-bucket/path/to/inventory/YYYY-MM-DDT00-00Z/manifest.json`, and your lakeFS configuration yaml is at `config.yaml` (see notes below), run the following command to start the import:
@@ -142,15 +133,14 @@ lakefs import --with-merge lakefs://example-repo -m s3://example-bucket/path/to/
 ```
 
 #### Notes
-{: .no_toc }
+
 1. Perform the import from a machine with access to your database, and on the same region of your destination bucket.
-
 1. You can download the `lakefs` binary from [here](https://github.com/treeverse/lakeFS/releases). Make sure you choose one compatible with your installation of lakeFS.
-
 1. Use a configuration file like the one used to start your lakeFS installation. This will be used to access your database. An example can be found [here](http://localhost:4000/reference/configuration.html#example-aws-deployment).
 
+{% hint style="warn" %}
 **Warning:** the *import-from-inventory* branch should only be used by lakeFS. You should not make any operations on it.
-{: .note } 
+{% endhint %}
 
 ### Gradual Import
 
