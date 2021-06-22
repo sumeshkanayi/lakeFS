@@ -11,7 +11,7 @@ The path under the existing bucket/container should be empty.
 
 If you already have a bucket/container configured, you are ready to [create your first lakeFS repository](../create-repo.md).
 
-## Choose your storage provider to configure your storage
+#### Choose your storage provider to configure your storage
 
 * [Azure Blob](blob.md)
 * [GCS](gcs.md)
