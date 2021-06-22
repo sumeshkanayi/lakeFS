@@ -1,20 +1,8 @@
 ---
-layout: default
-title: Authentication & Authorization
 description: This section covers authorization (using AWS IAM) and Authentication of your lakeFS server. 
-parent: Reference
-nav_order: 60
-has_children: false
 ---
 
 # Authentication & Authorization
-{: .no_toc }
-
-## Table of contents
-{: .no_toc .text-delta }
-
-1. TOC
-{:toc}
 
 ## Authentication
 
@@ -37,7 +25,7 @@ Authorization: Basic bXlfYWNjZXNzX2tleV9pZDpteV9hY2Nlc3Nfc2VjcmV0X2tleQ==
 
 ### S3 Gateway Authentication
 
-To provide API compatibility with Amazon S3, authentication with the S3 Gateway supports both [SIGv2](https://docs.aws.amazon.com/general/latest/gr/signature-version-2.html){:target="_blank"} and [SIGv4](https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html){:target="_blank"}.
+To provide API compatibility with Amazon S3, authentication with the S3 Gateway supports both [SIGv2](https://docs.aws.amazon.com/general/latest/gr/signature-version-2.html) and [SIGv4](https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html).
 Clients such as the AWS SDK that implement these authentication methods should work without modification.
 
 See [this example for authenticating with the AWS CLI](../integrations/aws_cli.md).
@@ -46,7 +34,7 @@ See [this example for authenticating with the AWS CLI](../integrations/aws_cli.m
 
 ### Authorization Model
 
-Access to resources is managed very much like [AWS IAM](https://docs.aws.amazon.com/IAM/latest/UserGuide/intro-structure.html){:target="_blank"}.
+Access to resources is managed very much like [AWS IAM](https://docs.aws.amazon.com/IAM/latest/UserGuide/intro-structure.html).
 
 There are 4 basic components to the system:
 
@@ -84,14 +72,14 @@ This helps us compose policies together. For example, we could attach a very per
 
 ### Resource naming - ARNs
 
-lakeFS uses [ARN identifier](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_identifiers.html#identifiers-arns){:target="_blank"} - very similar in structure to those used by AWS.
+lakeFS uses [ARN identifier](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_identifiers.html#identifiers-arns) - very similar in structure to those used by AWS.
 The resource segment of the ARN supports wildcards: use `*` to match 0 or more characters, or `?` to match exactly one character.
 
 Additionally, the current user's ID is interpolated in runtime into the ARN using the `${user}` placeholder.
 
 Here are a few examples of valid ARNs within lakeFS:
 
- ```text
+```text
 arn:lakefs:auth:::user/jane.doe
 arn:lakefs:auth:::user/*
 arn:lakefs:fs:::repository/myrepo/*
@@ -100,7 +88,8 @@ arn:lakefs:fs:::repository/myrepo/object/*
 arn:lakefs:fs:::repository/*
 arn:lakefs:fs:::*
 ```
-this allows us to create fine-grained policies affecting only a specific subset of resources. 
+
+This allows us to create fine-grained policies affecting only a specific subset of resources. 
 
 See below for a full reference of ARNs and actions
 

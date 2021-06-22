@@ -11,22 +11,10 @@ import (
 
 // language=markdown
 var cliReferenceHeader = `---
-layout: default
-title: Command (CLI) Reference
 description: lakeFS comes with its own native CLI client. Here you can see the complete command reference.
-parent: Reference
-nav_order: 3
-has_children: false
 ---
 
 # Commands (CLI) Reference
-{: .no_toc }
-
-## Table of contents
-{: .no_toc .text-delta }
-
-1. TOC
-{:toc}
 
 ## Installing the lakectl command locally
 
@@ -79,7 +67,7 @@ func genMarkdownForCmd(cmd *cobra.Command, w io.Writer) error {
 	buf.WriteString("### " + name + "\n\n")
 
 	if cmd.Hidden {
-		buf.WriteString("**note:** This command is a lakeFS plumbing command. Don't use it unless you're really sure you know what you're doing.\n{: .note .note-warning }\n\n")
+		buf.WriteString("{% hint style=\"warning\" %}\nThis command is a lakeFS plumbing command. Don't use it unless you're really sure you know what you're doing.\n{% endhint %}\n\n")
 	}
 
 	buf.WriteString(cmd.Short + "\n\n")

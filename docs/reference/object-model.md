@@ -1,20 +1,8 @@
 ---
-layout: default
-title: Object Model 
 description: The lakeFS object model blends the object models of git and of object stores such as S3.  Here are the explicit definitions.
-parent: Reference
-nav_order: 70
-has_children: false
 ---
 
 # Commands (CLI) Reference
-{: .no_toc }
-
-## Table of contents
-{: .no_toc .text-delta }
-
-1. TOC
-{:toc}
 
 ## Introduction
 
@@ -100,12 +88,12 @@ examples at the end of that section will work unchanged in lakeFS.
 
 * A branch or a tag are ref expressions.
 * If `<ref>` is a ref expression, then:
-  + `<ref>^` is a ref expression referring to its first parent.
-  + `<ref>^N` is a ref expression referring to its N'th parent; in particular `<ref>^1` is the
+  - `<ref>^` is a ref expression referring to its first parent.
+  - `<ref>^N` is a ref expression referring to its N'th parent; in particular `<ref>^1` is the
     same as `<ref>^`.
-  + `<ref>~` is a ref expression referring to its first parent; in particular `<ref>~` is the
+  - `<ref>~` is a ref expression referring to its first parent; in particular `<ref>~` is the
     same as `<ref>^` and `<ref>~`.
-  + `<ref>~N` is a ref expression referring to its N'th parent, always traversing to the first
+  - `<ref>~N` is a ref expression referring to its N'th parent, always traversing to the first
     parent.  So `<ref>~N` is the same as `<ref>^^...^` with N consecutive carets `^`.
 
 ### History

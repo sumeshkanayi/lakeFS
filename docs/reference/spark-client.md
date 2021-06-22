@@ -1,12 +1,6 @@
 ---
-layout: default
-title: Spark Client
 description: lakeFS spark client performs operations on lakeFS committed metadata stored in the object store. 
-parent: Reference
-nav_exclude: true
-has_children: false
 ---
-
 
 # lakeFS Spark Client
 
@@ -22,14 +16,16 @@ Utilize the power of Spark to interact with the metadata on lakeFS. Possible use
 Start Spark Shell / PySpark with the `--packages` flag:
 
 Spark 3.0.1:
-   ```bash
-   spark-shell --packages io.treeverse:lakefs-spark-client-301_2.12:0.1.0-SNAPSHOT
-   ```
+
+```bash
+spark-shell --packages io.treeverse:lakefs-spark-client-301_2.12:0.1.0-SNAPSHOT
+```
 
 Spark 2.4.7:
-   ```bash
-   spark-shell --packages io.treeverse:lakefs-spark-client-247_2.11:0.1.0-SNAPSHOT
-   ```
+
+```bash
+spark-shell --packages io.treeverse:lakefs-spark-client-247_2.11:0.1.0-SNAPSHOT
+```
 
 Alternatively, the Jars are publicly available on S3:
 

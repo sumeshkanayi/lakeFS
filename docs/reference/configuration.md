@@ -1,20 +1,8 @@
 ---
-layout: default
-title: Configuration Reference
 description: Configuring lakeFS is done using a yaml configuration file. This reference uses . to denote the nesting of values.
-parent: Reference
-nav_order: 2
-has_children: false
 ---
 
 # Configuration Reference
-{: .no_toc }
-
-## Table of contents
-{: .no_toc .text-delta }
-
-1. TOC
-{:toc}
 
 Configuring lakeFS is done using a yaml configuration file.
 This reference uses `.` to denote the nesting of values.
@@ -35,8 +23,10 @@ This reference uses `.` to denote the nesting of values.
 * `auth.cache.jitter` `(time duration : "3s")` - A random amount of time between 0 and this value is added to each item's TTL. This is done to avoid a large bulk of keys expiring at once and overwhelming the database.
 * `auth.encrypt.secret_key` `(string : required)` - A random (cryptographically safe) generated string that is used for encryption and HMAC signing
 
-   **Note:** It is best to keep this somewhere safe such as KMS or Hashicorp Vault, and provide it to the system at run time
-   {: .note }
+
+  {% hint style="info" %}
+  **Note:** It is best to keep this somewhere safe such as KMS or Hashicorp Vault, and provide it to the system at run time
+  {% endhint %}
 
 * `blockstore.type` `(one of ["local", "s3", "gs", "azure", "mem"]: "mem")` - Block adapter to use. This controls where the underlying data will be stored
 * `blockstore.local.path` `(string: "~/lakefs/data")` - When using the local Block Adapter, which directory to store files in
@@ -91,7 +81,7 @@ This reference uses `.` to denote the nesting of values.
 * `gateways.s3.region` `(string : "us-east-1")` - AWS region we're pretending to be. Should match the region configuration used in AWS SDK clients
 * `gateways.s3.fallback_url` `(string)` - If specified, requests with a non-existing repository will be forwarded to this url. This can be useful for using lakeFS side-by-side with S3, with the URL pointing at an [S3Proxy](https://github.com/gaul/s3proxy) instance.
 * `stats.enabled` `(boolean : true)` - Whether or not to periodically collect anonymous usage statistics
-{: .ref-list }
+
 
 ## Using Environment Variables
 

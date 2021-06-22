@@ -1,15 +1,9 @@
 ---
-layout: default
-title: Upgrade lakeFS
 description: Upgrading lakeFS from a previous version usually just requires re-deploying with the latest image or downloading the latest version
-parent: Reference
-nav_order: 50
-has_children: false
-redirect_from: ../deploying-aws/upgrade.html
 ---
 
 # Upgrading lakeFS
-{: .no_toc }
+
 Upgrading lakeFS from a previous version usually just requires re-deploying with the latest image (or downloading the latest version, if you're using the binary).
 There are cases where the database will require a migration - check whether the [release](https://github.com/treeverse/lakeFS/releases) you are upgrading to requires that.
 
@@ -32,27 +26,28 @@ Note that an older version of lakeFS cannot run on a migrated database.
 
 ### Prior to lakeFS 0.30.0
 
+{% hint style="info" %}
 **Note:** users of lakeFS < 0.30.0 should first upgrade to 0.30.0 following this guide, before upgrading to any higher version
-{: .note .pb-3 }
+{% endhint %}
 
-Starting version 0.30.0, lakeFS handles your committed metadata in a [new way](https://docs.google.com/document/d/1jzD7-jun-tdU5BGapmnMBe9ovSzBvTNjXCcVztV07A4/edit?usp=sharing){: target="_blank" }, which is more robust and has better performance.
+Starting version 0.30.0, lakeFS handles your committed metadata in a [new way](https://docs.google.com/document/d/1jzD7-jun-tdU5BGapmnMBe9ovSzBvTNjXCcVztV07A4/edit?usp=sharing), which is more robust and has better performance.
 To move your existing data, you will need to run the following upgrade commands.
 
 Verify lakeFS version == 0.30.0 (can skip if using Docker)
 
-```shell
+```bash
 lakefs --version
 ```
 
 Migrate data from previous format:
 
-```shell
+```bash
 lakefs migrate db
 ```
 
 Or migrate using Docker image:
 
-```shell
+```bash
 docker run --rm -it -e LAKEFS_DATABASE_CONNECTION_STRING=<database connection string> treeverse/lakefs:rocks-migrate migrate db
 ```
 

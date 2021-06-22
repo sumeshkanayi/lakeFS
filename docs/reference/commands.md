@@ -1,20 +1,8 @@
 ---
-layout: default
-title: Command (CLI) Reference
 description: lakeFS comes with its own native CLI client. Here you can see the complete command reference.
-parent: Reference
-nav_order: 3
-has_children: false
 ---
 
 # Commands (CLI) Reference
-{: .no_toc }
-
-## Table of contents
-{: .no_toc .text-delta }
-
-1. TOC
-{:toc}
 
 ## Installing the lakectl command locally
 
@@ -66,8 +54,9 @@ lakectl is a CLI tool allowing exploration and manipulation of a lakeFS environm
 
 ### lakectl abuse
 
-**note:** This command is a lakeFS plumbing command. Don't use it unless you're really sure you know what you're doing.
-{: .note .note-warning }
+{% hint style="warning" %}
+This command is a lakeFS plumbing command. Don't use it unless you're really sure you know what you're doing.
+{% endhint %}
 
 abuse a running lakeFS instance. See sub commands for more info.
 
@@ -1179,8 +1168,9 @@ lakectl branch show <branch uri> [flags]
 
 ### lakectl cat-hook-output
 
-**note:** This command is a lakeFS plumbing command. Don't use it unless you're really sure you know what you're doing.
-{: .note .note-warning }
+{% hint style="warning" %}
+This command is a lakeFS plumbing command. Don't use it unless you're really sure you know what you're doing.
+{% endhint %}
 
 Cat actions hook output
 
@@ -1204,8 +1194,9 @@ lakectl cat-hook-output lakefs://<repository> <run_id> <run_hook_id>
 
 ### lakectl cat-sst
 
-**note:** This command is a lakeFS plumbing command. Don't use it unless you're really sure you know what you're doing.
-{: .note .note-warning }
+{% hint style="warning" %}
+This command is a lakeFS plumbing command. Don't use it unless you're really sure you know what you're doing.
+{% endhint %}
 
 Explore lakeFS .sst files
 
@@ -1348,8 +1339,9 @@ lakectl diff <ref uri> [other ref uri] [flags]
 
 ### lakectl docs
 
-**note:** This command is a lakeFS plumbing command. Don't use it unless you're really sure you know what you're doing.
-{: .note .note-warning }
+{% hint style="warning" %}
+This command is a lakeFS plumbing command. Don't use it unless you're really sure you know what you're doing.
+{% endhint %}
 
 
 
@@ -1367,8 +1359,9 @@ lakectl docs [outfile] [flags]
 
 ### lakectl fs
 
-**note:** This command is a lakeFS plumbing command. Don't use it unless you're really sure you know what you're doing.
-{: .note .note-warning }
+{% hint style="warning" %}
+This command is a lakeFS plumbing command. Don't use it unless you're really sure you know what you're doing.
+{% endhint %}
 
 view and manipulate objects
 
@@ -1453,8 +1446,9 @@ lakectl fs rm <path uri> [flags]
 
 ### lakectl fs stage
 
-**note:** This command is a lakeFS plumbing command. Don't use it unless you're really sure you know what you're doing.
-{: .note .note-warning }
+{% hint style="warning" %}
+This command is a lakeFS plumbing command. Don't use it unless you're really sure you know what you're doing.
+{% endhint %}
 
 stages a reference to an existing object, to be managed in lakeFS
 
@@ -1739,8 +1733,9 @@ lakectl metastore help [command] [flags]
 
 ### lakectl refs-dump
 
-**note:** This command is a lakeFS plumbing command. Don't use it unless you're really sure you know what you're doing.
-{: .note .note-warning }
+{% hint style="warning" %}
+This command is a lakeFS plumbing command. Don't use it unless you're really sure you know what you're doing.
+{% endhint %}
 
 dumps refs (branches, commits, tags) to the underlying object store
 
@@ -1758,8 +1753,9 @@ lakectl refs-dump <repository uri> [flags]
 
 ### lakectl refs-restore
 
-**note:** This command is a lakeFS plumbing command. Don't use it unless you're really sure you know what you're doing.
-{: .note .note-warning }
+{% hint style="warning" %}
+This command is a lakeFS plumbing command. Don't use it unless you're really sure you know what you're doing.
+{% endhint %}
 
 restores refs (branches, commits, tags) from the underlying object store to a bare repository
 
@@ -1820,8 +1816,9 @@ lakectl repo create <repository uri> <storage namespace> [flags]
 
 ### lakectl repo create-bare
 
-**note:** This command is a lakeFS plumbing command. Don't use it unless you're really sure you know what you're doing.
-{: .note .note-warning }
+{% hint style="warning" %}
+This command is a lakeFS plumbing command. Don't use it unless you're really sure you know what you're doing.
+{% endhint %}
 
 create a new repository with no initial branch or commit
 
