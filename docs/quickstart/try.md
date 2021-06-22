@@ -1,3 +1,7 @@
+---
+description: Learn how to use lakeFS using the CLI from your browser, without installing anything
+---
+
 # Try lakeFS without installing
 
 ## Katacoda Tutorial

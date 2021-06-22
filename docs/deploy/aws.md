@@ -13,8 +13,8 @@ We will show you how to create a database on AWS RDS, but you can use any Postgr
 
 If you already have a database, take note of the connection string and skip to the [next step](#install-lakefs-on-ec2)
 
-1. Follow the official [AWS documentation](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_GettingStarted.CreatingConnecting.PostgreSQL.html){: target="_blank" } on how to create a PostgreSQL instance and connect to it.  
-   You may use the default PostgreSQL engine, or [Aurora PostgreSQL](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Aurora.AuroraPostgreSQL.html){: target="_blank" }. Make sure you're using PostgreSQL version >= 11.
+1. Follow the official [AWS documentation](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_GettingStarted.CreatingConnecting.PostgreSQL.html) on how to create a PostgreSQL instance and connect to it.  
+   You may use the default PostgreSQL engine, or [Aurora PostgreSQL](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Aurora.AuroraPostgreSQL.html). Make sure you're using PostgreSQL version >= 11.
 2. Once your RDS is set up and the server is in `Available` state, take note of the endpoint and port.
 
    ![RDS Connection String](../assets/img/rds_conn.png)
