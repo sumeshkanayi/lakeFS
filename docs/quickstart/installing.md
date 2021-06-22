@@ -1,22 +1,10 @@
----
-layout: default
-title: Install lakeFS
-description: Installing lakeFS is easy. This section covers how to install lakeFS using docker compose.
-parent: Quickstart
-nav_order: 10
-has_children: false
----
-
 # Install lakeFS
-{: .no_toc }
 
 {% include learn_only.html %} 
 
 ## Using docker-compose
-{: .no_toc }
 
 Other quickstart methods can be found [here](more_quickstart_options.md).
-{: .note .note-info }
 
 To run a local lakeFS instance using [Docker Compose](https://docs.docker.com/compose/){:target="_blank"}:
 

@@ -1,14 +1,4 @@
----
-layout: default
-title: Create a Repository
-description: In this guide, we’re going to run an initial setup and then create a new repository using lakeFS.
-parent: Quickstart
-nav_order: 20
-has_children: false
----
-
 # Create a Repository
-{: .no_toc }
 
 ## Create the first user
 
@@ -35,12 +25,13 @@ Once we have a repository created, we can start [copying and modifying objects](
     
    ![Create Repository](../assets/img/create_repo_local.png)
 
+   {% hint style="info" %}
    A [repository](../understand/branching-model.md#repositories) is lakeFS's basic namespace, akin to S3's Bucket (read more about the data model [here](../understand/branching-model.md)).
    Since we're using the `local` block adapter, the value used for `Storage Namespace` should be a static `local://`.
    For a deployment that uses S3 as a block adapter, this would be a bucket name with an optional prefix, e.g. `s3://example-bucket/prefix`.
    Notice that lakeFS will only manage the data written under that prefix. All actions on the managed data must go through lakeFS endpoint.
    Data written directly to the bucket under different paths will be accessible in the same way it was before.   
-   {: .note .note-info }
+   {% endhint %}
    
 ### Next steps
 

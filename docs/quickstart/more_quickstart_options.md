@@ -1,22 +1,7 @@
----
-layout: default
-title: More Quickstart Options
-description: Quickstart options. This section outlines additional quickstart options to deploying lakeFS.
-parent: Quickstart
-nav_order: 50
-has_children: false
----
 
 # More Quickstart Options
-{: .no_toc}
 
 {% include learn_only.html %} 
-
-## Table of Contents
-{: .no_toc .text-delta }
-
-1. TOC
-{:toc}
 
 ## Docker on Windows
 
@@ -49,7 +34,7 @@ Alternatively, you may opt to run the lakefs binary directly on your computer.
 
 1. Download the lakeFS binary for your operating system:
 
-   [Download lakefs](../index.md#downloads){: .btn .btn-green target="_blank"}
+   [Download lakefs](../index.md#downloads)
 
 1. Install and configure [PostgreSQL](https://www.postgresql.org/download/){:target="_blank"}
 
@@ -75,7 +60,7 @@ Alternatively, you may opt to run the lakefs binary directly on your computer.
 
 1. Create a local directory to store objects:
 
-   ```sh
+   ```bash
    mkdir ~/lakefs_data
    ```
 

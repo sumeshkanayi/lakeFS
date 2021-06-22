@@ -1,11 +1,3 @@
----
-layout: default
-title: Install lakeFS CLI
-parent: Quickstart
-nav_order: 40
-has_children: false
----
-
 # Install lakeFS CLI
 
   lakeFS comes with its own native CLI client. You can see the complete command reference [here](../reference/commands.md).
@@ -16,10 +8,10 @@ has_children: false
 
   1. Download the CLI binary:
 
-     [Download lakectl](../index.md#downloads){: .btn .btn-green target="_blank"}
+     [Download lakectl](../index.md#downloads)
   
   
-  1. It's recommended that you place it somewhere in your PATH (this is OS dependant but for *NIX systems , `/usr/local/bin` is usually a safe bet).
+  1. It's recommended that you place it somewhere in your PATH (this is OS dependant but for *NIX systems, `/usr/local/bin` is usually a safe bet).
   1. configure the CLI to use the credentials you've created earlier:
 
      ```bash

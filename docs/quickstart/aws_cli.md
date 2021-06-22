@@ -1,13 +1,5 @@
----
-layout: default 
-title: Add Data
-description: In this section we will learn how to configure and use AWS CLI to manage data with the lakeFS Server.
-parent: Quickstart
-nav_order: 30
-has_children: false
----
-
 # Add Data
+
 In this section we'll review how to copy files into lakeFS using the AWS CLI.
 
 1. If you don't have the AWS CLI installed, follow the [instructions here](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html){:target="_blank"}.
@@ -21,6 +13,7 @@ In this section we'll review how to copy files into lakeFS using the AWS CLI.
    # Default region name [None]:
    # Default output format [None]:
    ```
+   
 1. Let's test to see that it works. We'll do that by calling `s3 ls` which should list our repositories for us:
    
    ```bash
