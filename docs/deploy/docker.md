@@ -1,3 +1,7 @@
+---
+title: With Docker
+description: This guide will help you deploy your production lakeFS environment with Docker.
+---
 # Deploy lakeFS on Docker
 
 ## Database
