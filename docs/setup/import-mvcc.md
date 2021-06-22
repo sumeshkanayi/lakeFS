@@ -5,7 +5,9 @@ description: In order to import existing data to lakeFS, you may choose to copy 
 # Importing data from S3
 
 {% hint style="warning" %}
+
 The following instructions are relevant for lakeFS older than v0.24.0 
+
 {% endhist}
 
 ## Copying using external tools
