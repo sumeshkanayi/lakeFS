@@ -14,11 +14,12 @@ Instructions for creating the database can be found on the deployment instructio
 
 lakeFS can be easily installed on Kubernetes using a [Helm chart](https://github.com/treeverse/charts/tree/master/charts/lakefs).
 To install lakeFS with Helm:
+
 1. Copy the Helm values file relevant to your storage provider:
 
 {% tabs %}
 
-  {% tab title="S3" %}
+{% tab title="S3" %}
 
 ```yaml
 secrets:
@@ -38,6 +39,7 @@ lakefsConfig: |
         domain_name: [S3_GATEWAY_DOMAIN]
 ```
   {% endtab %}
+  
   {% tab title="GCS" %}
 
 ```yaml
@@ -62,8 +64,9 @@ lakefsConfig: |
    * To connect to your database, you need to use one of the ways of [connecting GKE to Cloud SQL](https://cloud.google.com/sql/docs/mysql/connect-kubernetes-engine#cloud-sql-auth-proxy-with-workload-identity).
    * To give lakeFS access to your bucket, you can start the cluster in [storage-rw](https://cloud.google.com/container-registry/docs/access-control#gke) mode. Alternatively, you can use a service account JSON string by uncommenting the `gs.credentials_json` property in the following yaml.
 
-  {% endtab %}
-  {% tab title="Azure Blob" %}
+{% endtab %}
+
+{% tab title="Azure Blob" %}
 
 ```yaml
 secrets:
@@ -84,7 +87,8 @@ lakefsConfig: |
         # replace this with the host you will use for the lakeFS S3-compatible endpoint:
         domain_name: s3.lakefs.example.com
 ```
-  {% endtab %}
+
+{% endtab %}
 {% endtabs %}
 
 1. Fill in the missing values and save the file as `conf-values.yaml`. For more configuration options, see our Helm chart [README](https://github.com/treeverse/charts/blob/master/charts/lakefs/README.md#custom-configuration).
