@@ -16,7 +16,7 @@ lakeFS can be easily installed on Kubernetes using a [Helm chart](https://github
 To install lakeFS with Helm:
 
 1. Copy the Helm values file relevant to your storage provider:
-    {% tabs %}
+{% tabs %}
     {% tab title="S3" %}
     ```yaml
     secrets:
@@ -80,7 +80,7 @@ To install lakeFS with Helm:
             domain_name: s3.lakefs.example.com
     ```
     {% endtab %}
-    {% endtabs %}
+{% endtabs %}
 
 1. Fill in the missing values and save the file as `conf-values.yaml`. For more configuration options, see our Helm chart [README](https://github.com/treeverse/charts/blob/master/charts/lakefs/README.md#custom-configuration).
 
