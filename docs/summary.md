@@ -18,7 +18,7 @@
   * [On Docker](deploy/docker.md)
 
 * Setup
-  * [Prepare Your Storage](setup/index.md)
+  * [Prepare Your Storage](setup/storage/index.md)
     * [Blob Storage Container](setup/storage/blob.md)
     * [GCS Bucket](setup/storage/gcs.md)
     * [Storage](setup/storage/index.md)
