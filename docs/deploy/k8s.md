@@ -1,29 +1,10 @@
----
-layout: default
-title: With Kubernetes
-parent: Deploy lakeFS
-description: This guide will help you deploy your production lakeFS environment on Kubernetes using a helm chart
-nav_order: 40
----
-
-
 # Deploy lakeFS on Kubernetes
-{: .no_toc }
 
 ## Database
-{: .no_toc }
 
 lakeFS requires a PostgreSQL database to synchronize actions on your repositories.
 This section assumes you already have a PostgreSQL database accessible from your Kubernetes cluster.
 Instructions for creating the database can be found on the deployment instructions for [AWS](./aws.md#creating-the-database-on-aws-rds), [Azure](./azure.md#creating-the-database-on-azure-database) and [GCP](./gcp.md#creating-the-database-on-gcp-sql).
-
-## Table of contents
-{: .no_toc .text-delta }
-
-1. TOC
-{:toc}
-
-{% include_relative includes/prerequisites.md %}
 
 ## Installing on Kubernetes
 
@@ -63,9 +44,10 @@ To install lakeFS with Helm:
 
    *example-lakefs* is the [Helm Release](https://helm.sh/docs/intro/using_helm/#three-big-concepts) name.
 
+{% hint style="info" %}
 You should give your Kubernetes nodes access to all buckets/containers you intend to use lakeFS with.
 If you can't provide such access, lakeFS can be configured to use an AWS key-pair, an Azure access key, or a Google Cloud credentials file to authenticate (part of the `lakefsConfig` YAML below).
-{: .note .note-info }
+{% endhint %}
 
 ## Load balancing
 You should have a load balancer direct requests to the lakeFS server.
@@ -81,5 +63,3 @@ All records should point to your Load Balancer, preferably with a short TTL valu
 
 ## Next Steps
 Your next step is to [prepare your storage](../setup/storage/index.md). If you already have a storage bucket/container, you are ready to [create your first lakeFS repository](../setup/create-repo.md).
-
-{% include_relative includes/why-dns.md %}

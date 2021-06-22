@@ -1,22 +1,6 @@
----
-layout: default
-title: On GCP
-parent: Deploy lakeFS
-description: This guide will help you deploy your production lakeFS environment on GCP
-nav_order: 30
----
-
 # Deploy lakeFS on GCP
-{: .no_toc }
+
 Expected deployment time: 25min
-
-## Table of contents
-{: .no_toc .text-delta }
-
-1. TOC 
-{:toc}
-
-{% include_relative includes/prerequisites.md %}
 
 ## Creating the Database on GCP SQL
 lakeFS requires a PostgreSQL database to synchronize actions on your repositories.
@@ -65,6 +49,7 @@ For example, if you install lakeFS on GKE, you need to deploy the SQL Auth Proxy
    **Note:** it is preferable to run the binary as a service using systemd or your operating system's facilities.
 
 ### On Google Cloud Run
+
 To support container-based environments like Google Cloud Run, lakeFS can be configured using environment variables. Here is a `docker run`
 command to demonstrate starting lakeFS using Docker:
 
@@ -82,13 +67,16 @@ docker run \
 See the [reference](../reference/configuration.md#using-environment-variables) for a complete list of environment variables.
 
 ### On GKE
+
 See [Kubernetes Deployment](./k8s.md).
 
 ## Load balancing
+
 Depending on how you chose to install lakeFS, you should have a load balancer direct requests to the lakeFS server.  
 By default, lakeFS operates on port 8000, and exposes a `/_health` endpoint which you can use for health checks.
 
 ## DNS
+
 As mentioned above, you should create 3 DNS records for lakeFS:
 1. One record for the lakeFS API: `lakefs.example.com`
 1. Two records for the S3-compatible API: `s3.lakefs.example.com` and `*.s3.lakefs.example.com`.
@@ -96,6 +84,5 @@ As mentioned above, you should create 3 DNS records for lakeFS:
 Depending on your DNS provider, refer to the documentation on how to add CNAME records.
 
 ## Next Steps
-Your next step is to [prepare your storage](../setup/storage/index.md). If you already have a storage bucket/container, you are ready to [create your first lakeFS repository](../setup/create-repo.md).
 
-{% include_relative includes/why-dns.md %}
+Your next step is to [prepare your storage](../setup/storage/index.md). If you already have a storage bucket/container, you are ready to [create your first lakeFS repository](../setup/create-repo.md).

@@ -1,22 +1,6 @@
----
-layout: default
-title: On Azure
-parent: Deploy lakeFS
-description:  This guide will help you deploy your production lakeFS environment on Azure 
-nav_order: 20
----
-
 # Deploy lakeFS on Azure
-{: .no_toc }
+
 Expected deployment time: 25min
-
-## Table of contents
-{: .no_toc .text-delta }
-
-1. TOC
-{:toc}
-
-{% include_relative includes/prerequisites.md %}
 
 ## Creating the Database on Azure Database
 lakeFS requires a PostgreSQL database to synchronize actions on your repositories.
@@ -33,6 +17,7 @@ If you already have a database, take note of the connection string and skip to t
 ## Installation Options
 
 ### On Azure VM
+
 1. Save the following configuration file as `config.yaml`:
 
    ```yaml
@@ -99,5 +84,3 @@ Depending on your DNS provider, refer to the documentation on how to add CNAME r
 
 ## Next Steps
 Your next step is to [prepare your storage](../setup/storage/index.md). If you already have a storage bucket/container, you are ready to [create your first lakeFS repository](../setup/create-repo.md).
-
-{% include_relative includes/why-dns.md %}

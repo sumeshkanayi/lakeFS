@@ -9,6 +9,7 @@
   * [Try lakeFS without installing](quickstart/try.md)
 
 * Deploy
+  * [Prerequisites](deploy/prerequisites.md)
   * [On AWS](deploy/aws.md)
   * [On Azure](deploy/azure.md)
   * [On GCP](deploy/gcp.md)

@@ -2,13 +2,6 @@
 
 Expected deployment time: 25min
 
-## Table of contents
-
-1. TOC
-{:toc}
-
-{% include_relative includes/prerequisites.md %}
-
 ## Creating the Database on AWS RDS
 
 lakeFS requires a PostgreSQL database to synchronize actions on your repositories.
@@ -101,5 +94,3 @@ For other DNS providers, refer to the documentation on how to add CNAME records.
 
 ## Next Steps
 Your next step is to [prepare your storage](../setup/storage/index.md). If you already have a storage bucket/container, you are ready to [create your first lakeFS repository](../setup/create-repo.md).
-
-{% include_relative includes/why-dns.md %}
