@@ -42,7 +42,7 @@ at roughly 1Kb per request.
 lakeFS greatly benefits from fast local disks. 
 A lakeFS instance doesn't require any strong durability guarantees from the underlying storage, 
 as the disk is only ever used as a local caching layer for lakeFS metadata, and not for long-term storage.
-lakeFS is designed to work with [ephemeral disks](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ssd-instance-store.html){: target="_blank" } - 
+lakeFS is designed to work with [ephemeral disks](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ssd-instance-store.html) - 
 these are usually based on NVMe and are tied to the machine's lifecycle. 
 Using ephemeral disks lakeFS can provide a very high throughput/cost ratio, 
 probably the best that could be achieved on a public cloud, so we recommend those.
@@ -68,7 +68,7 @@ We recommend starting at 10 GiB for a production deployment, as it will likely b
 
 #### RAM and `shared_buffers`
 Since the data size is small, it is recommended to provide enough memory to hold the vast majority of that data in RAM:
-Ideally configure [shared_buffers](https://www.postgresql.org/docs/current/runtime-config-resource.html#GUC-SHARED-BUFFERS){: target="_blank" } 
+Ideally configure [shared_buffers](https://www.postgresql.org/docs/current/runtime-config-resource.html#GUC-SHARED-BUFFERS) 
 of your PostgreSQL instances to be large enough to contain the currently active dataset. 
 Pick a database instance with enough RAM to accommodate this buffer size, at roughly x4 the size given for `shared_buffers` 
 (so for example, if an installation has ~500,000 uncommitted writes at any given time, it would require about 750 MiB of `shared_buffers`, 
@@ -114,12 +114,12 @@ Most critical path operations scale very well across machines.
 
 ## Benchmarks
 
-All benchmarks below were measured using 2 x [c5ad.4xlarge](https://aws.amazon.com/ec2/instance-types/c5/){: target="_blank" } instances 
+All benchmarks below were measured using 2 x [c5ad.4xlarge](https://aws.amazon.com/ec2/instance-types/c5/) instances 
 on [AWS us-east-1](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html#concepts-available-regions). 
 Similar results can be achieved on Google Cloud using a `c2-standard-16` machine type, with an attached [local SSD](https://cloud.google.com/compute/docs/disks/local-ssd).
 On Azure, a `Standard_F16s_v2` virtual machine can be used.
 
-The PostgreSQL instance that was used is a [db.m6g.2xlarge](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.DBInstanceClass.html){: target="_blank" }
+The PostgreSQL instance that was used is a [db.m6g.2xlarge](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.DBInstanceClass.html)
 (8 vCPUs, 32 GB RAM). Equivalent machines on Google Cloud or Azure should yield similar results.
 
 The example repository we tested against contains the metadata of a large lakeFS installation, 
@@ -275,7 +275,7 @@ Average throughput during the experiment was **7069.03 requests/second**
 
 ## Important metrics
 
-lakeFS exposes metrics using the [Prometheus protocol](https://prometheus.io/docs/introduction/overview/){: target="_blank" }. 
+lakeFS exposes metrics using the [Prometheus protocol](https://prometheus.io/docs/introduction/overview/). 
 Every lakeFS instance exposes a `/metrics` endpoint that could be used to extract them. 
 
 Here are a few notable metrics to keep track of when sizing lakeFS:
@@ -287,7 +287,7 @@ Here are a few notable metrics to keep track of when sizing lakeFS:
 `gateway_request_duration_seconds` - Histogram of latency per [S3 Gateway](architecture.md#s3-gateway) operation
 
 `go_sql_stats_*` - Important client-side metrics collected from the PostgreSQL driver. 
-See [The full reference here](https://github.com/dlmiddlecote/sqlstats#exposed-metrics){: target="_blank" }.
+See [The full reference here](https://github.com/dlmiddlecote/sqlstats#exposed-metrics).
 
 ## Reference architectures
 
@@ -302,8 +302,8 @@ as well as unstructured sensor and image data used for training.
 Assuming a team of 20-50 researchers, with a dataset size of 500 TiB across 20M objects.
 
 **Environment:** lakeFS will be deployed on [Kubernetes](../deploy/k8s.md) 
-managed by [AWS EKS](https://aws.amazon.com/eks/){: target="_blank" } 
-with PostgreSQL on [AWS RDS Aurora](https://aws.amazon.com/rds/aurora/postgresql-features/){: target="_blank" }
+managed by [AWS EKS](https://aws.amazon.com/eks/) 
+with PostgreSQL on [AWS RDS Aurora](https://aws.amazon.com/rds/aurora/postgresql-features/)
 
 **Sizing:** Since most of the work is done by humans (vs automated pipelines), most experiments tend to be small in scale, 
 reading and writing 10s to 1000s of objects. 
@@ -331,8 +331,8 @@ Data being managed by lakeFS is structured, tabular data. Total dataset size is 
 Expected throughput is 10k reads/second + 2k writes per second across 100 concurrent branches.
 
 **Environment:** lakeFS will be deployed on [Kubernetes](../deploy/k8s.md) 
-managed by [AWS EKS](https://aws.amazon.com/eks/){: target="_blank" } 
-with PostgreSQL on [AWS RDS](https://aws.amazon.com/rds/aurora/postgresql-features/){: target="_blank" }
+managed by [AWS EKS](https://aws.amazon.com/eks/) 
+with PostgreSQL on [AWS RDS](https://aws.amazon.com/rds/aurora/postgresql-features/)
 
 **Sizing:** Data pipelines tend to be bursty in nature: 
 reading in a lot of objects concurrently, doing some calculation or aggregation and then writing many objects concurrently. 

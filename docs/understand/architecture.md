@@ -25,7 +25,7 @@ lakeFS is distributed as a single binary encapsulating several logical services:
 
 The server itself is stateless, meaning you can easily add more instances to handle bigger load.
 
-lakeFS stores data in an underlying [S3 bucket](https://aws.amazon.com/s3/){:target="_blank"} with some of its metadata stored in [PostgreSQL](https://www.postgresql.org/){:target="_blank"}. (see [Data Model](data-model.md))
+lakeFS stores data in an underlying [S3 bucket](https://aws.amazon.com/s3/) with some of its metadata stored in [PostgreSQL](https://www.postgresql.org/). (see [Data Model](data-model.md))
 
 ![Architecture](../assets/img/arch.png)
 
@@ -41,7 +41,7 @@ See the [S3 API Reference](../reference/s3.md) section for information on suppor
 
 ### OpenAPI Server
 
-The Swagger ([OpenAPI](https://swagger.io/docs/specification/basic-structure/){:target="_blank"}) Server exposes the full set of lakeFS operations (see [Reference](../reference/api.md)). This includes basic CRUD operations against repositories and objects, as well as versioning related operations such as branching, merging, committing and reverting changes to data.
+The Swagger ([OpenAPI](https://swagger.io/docs/specification/basic-structure/)) Server exposes the full set of lakeFS operations (see [Reference](../reference/api.md)). This includes basic CRUD operations against repositories and objects, as well as versioning related operations such as branching, merging, committing and reverting changes to data.
 
 ### S3 Storage Adapter
 
@@ -55,7 +55,7 @@ To learn about the data model used to store lakeFS metadata, see the [data model
 
 ### Authentication & Authorization Service
 
-The Auth service handles creation, management and validation of user credentials and [RBAC policies](https://en.wikipedia.org/wiki/Role-based_access_control){:target="_blank"}.
+The Auth service handles creation, management and validation of user credentials and [RBAC policies](https://en.wikipedia.org/wiki/Role-based_access_control).
 
 The credential scheme, along with the request signing logic are compatible with AWS IAM (both [SIGv2](https://docs.aws.amazon.com/general/latest/gr/signature-version-2.html) and [SIGv4](https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html)).
 

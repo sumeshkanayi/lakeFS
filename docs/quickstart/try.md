@@ -12,7 +12,7 @@ In the tutorial we cover:
 
 - Basic `lakectl` command line usage
 - How to read, write, list and delete objects from lakeFS using the `lakectl` command
-- Read from, and write to lakeFS using its S3 API interface using [Spark](https://spark.apache.org/){: target="_blank" }
+- Read from, and write to lakeFS using its S3 API interface using [Spark](https://spark.apache.org/)
 - Diff, commit and merge the changes created by Spark 
 - Track commit history to understand changes to your data over time
 

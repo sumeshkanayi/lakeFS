@@ -11,10 +11,10 @@ redirect_from: ../using/python.html
 # Calling the lakeFS API from Python
 {: .no_toc }
 
-The [lakeFS API](../reference/api.md){: target="_blank" } is OpenAPI 3.0 compliant, allowing the generation of clients from multiple languages or directly accessed by any HTTP client.
+The [lakeFS API](../reference/api.md) is OpenAPI 3.0 compliant, allowing the generation of clients from multiple languages or directly accessed by any HTTP client.
 
-For Python, this example uses [lakeFS's python package](https://pypi.org/project/lakefs-client/){: target="_blank" }.
-The lakefs-client pacakge was created by [OpenAPI Generator](https://openapi-generator.tech){: target="_blank" } using our OpenAPI definition served by a lakeFS server.
+For Python, this example uses [lakeFS's python package](https://pypi.org/project/lakefs-client/).
+The lakefs-client pacakge was created by [OpenAPI Generator](https://openapi-generator.tech) using our OpenAPI definition served by a lakeFS server.
 
 ## Table of contents
 {: .no_toc .text-delta }

@@ -23,7 +23,7 @@ redirect_from: ../using/spark.html
 **Note** In all following examples we set AWS and lakeFS credentials at runtime, for
 clarity. In production, properties defining AWS credentials should be set using one of
 Hadoop's standard ways of [authenticating with
-S3](https://hadoop.apache.org/docs/current/hadoop-aws/tools/hadoop-aws/index.html#Authenticating_with_S3){:target="_blank"}.
+S3](https://hadoop.apache.org/docs/current/hadoop-aws/tools/hadoop-aws/index.html#Authenticating_with_S3).
 Similarly, properties defining lakeFS credentials should be configured in secure site files,
 not on the command line or inlined in code where they might be exposed.
 {: .note}

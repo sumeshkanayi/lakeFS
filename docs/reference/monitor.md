@@ -39,8 +39,8 @@ In addition, lakeFS exposes the following metrics to help monitor your deploymen
 ## Example queries
 
 {% hint style="info" %}
-**Note:** when using Prometheus functions like [rate](https://prometheus.io/docs/prometheus/latest/querying/functions/#rate){: target="_blank"}
-or [increase](https://prometheus.io/docs/prometheus/latest/querying/functions/#increase){: target="_blank"}, results are extrapolated and may not be exact.
+**Note:** when using Prometheus functions like [rate](https://prometheus.io/docs/prometheus/latest/querying/functions/#rate)
+or [increase](https://prometheus.io/docs/prometheus/latest/querying/functions/#increase), results are extrapolated and may not be exact.
 {% endhint %}
 
 

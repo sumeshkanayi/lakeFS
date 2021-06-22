@@ -10,7 +10,7 @@ description: Installing lakeFS is easy. This section covers how to install lakeF
 
 Other quickstart methods can be found [here](more_quickstart_options.md).
 
-To run a local lakeFS instance using [Docker Compose](https://docs.docker.com/compose/){:target="_blank"}:
+To run a local lakeFS instance using [Docker Compose](https://docs.docker.com/compose/):
 
 1. Ensure you have Docker & Docker Compose installed on your computer, and that compose version is 1.25.04 or higher. For more information, please see this [issue](https://github.com/treeverse/lakeFS/issues/894). 
 
@@ -20,7 +20,7 @@ To run a local lakeFS instance using [Docker Compose](https://docs.docker.com/co
    curl https://compose.lakefs.io | docker-compose -f - up
    ```
 
-1. Check your installation by opening [http://127.0.0.1:8000/setup](http://127.0.0.1:8000/setup){:target="_blank"} in your web browser.
+1. Check your installation by opening [http://127.0.0.1:8000/setup](http://127.0.0.1:8000/setup) in your web browser.
 
 ### Next steps
 

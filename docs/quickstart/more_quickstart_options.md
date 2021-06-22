@@ -8,7 +8,7 @@ description: Quickstart options. This section outlines additional quickstart opt
 
 ## Docker on Windows
 
-To run a local lakeFS instance using [Docker Compose](https://docs.docker.com/compose/){:target="_blank"}:
+To run a local lakeFS instance using [Docker Compose](https://docs.docker.com/compose/):
 
 1. Ensure you have Docker installed on your computer, and that compose version is 1.25.04 or higher. For more information, please see this [issue](https://github.com/treeverse/lakeFS/issues/894).
 
@@ -18,7 +18,7 @@ To run a local lakeFS instance using [Docker Compose](https://docs.docker.com/co
    Invoke-WebRequest https://compose.lakefs.io | Select-Object -ExpandProperty Content | docker-compose -f - up
    ```
 
-1. Check your installation by opening [http://127.0.0.1:8000/setup](http://127.0.0.1:8000/setup){:target="_blank"} in your web browser.
+1. Check your installation by opening [http://127.0.0.1:8000/setup](http://127.0.0.1:8000/setup) in your web browser.
 
 
 ## On Kubernetes with Helm
@@ -39,7 +39,7 @@ Alternatively, you may opt to run the lakefs binary directly on your computer.
 
    [Download lakefs](../index.md#downloads)
 
-1. Install and configure [PostgreSQL](https://www.postgresql.org/download/){:target="_blank"}
+1. Install and configure [PostgreSQL](https://www.postgresql.org/download/)
 
 1. Create a configuration file:
     

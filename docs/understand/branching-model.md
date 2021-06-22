@@ -27,9 +27,9 @@ In lakeFS, a repository is a logical namespace used to group together objects, b
 
 ### Branches
 
-Branches are similar in concept to [Git branches](https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging){:target="_blank"}.  
+Branches are similar in concept to [Git branches](https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging).  
 When creating a new branch in lakeFS, we are actually creating a consistent snapshot of the entire repository, which is isolated from other branches and their changes.  
-Another way to think of branches is like a very long-lived database transaction, providing us with [Snapshot Isolation](https://en.wikipedia.org/wiki/Snapshot_isolation){: target="_blank" }.
+Another way to think of branches is like a very long-lived database transaction, providing us with [Snapshot Isolation](https://en.wikipedia.org/wiki/Snapshot_isolation).
 
 Once we've made the necessary changes to our data within our isolated branch, we can merge it back to the branch we branched from.  
 This operation is atomic in lakeFS - readers will either see all our committed changes or none at all.

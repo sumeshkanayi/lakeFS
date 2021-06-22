@@ -6,7 +6,7 @@ description: In this section we will learn how to configure and use AWS CLI to m
 
 In this section we'll review how to copy files into lakeFS using the AWS CLI.
 
-1. If you don't have the AWS CLI installed, follow the [instructions here](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html){:target="_blank"}.
+1. If you don't have the AWS CLI installed, follow the [instructions here](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html).
 1. Configure a new connection profile using the credentials we generated earlier:
 
    ```bash
@@ -27,7 +27,7 @@ In this section we'll review how to copy files into lakeFS using the AWS CLI.
    ```
    
    **Note:** We're using `s3.local.lakefs.io` - a special DNS record which always resolves to localhost, subdomains included.  
-   Since S3's API uses [subdomains for bucket addressing](https://aws.amazon.com/blogs/aws/amazon-s3-path-deprecation-plan-the-rest-of-the-story/){: target="_blank"}, simply using `localhost:8000` as an endpoint URL will not work.
+   Since S3's API uses [subdomains for bucket addressing](https://aws.amazon.com/blogs/aws/amazon-s3-path-deprecation-plan-the-rest-of-the-story/), simply using `localhost:8000` as an endpoint URL will not work.
    {: .note .note-info }
 
 1. Great, now let's copy some files. We'll write to the main branch. This is done by prefixing our path with the name of the branch we'd like to read/write from:
