@@ -4,7 +4,7 @@ structure:
     readme: index.md  
     summary: summary.md
     
-#redirects:  
+#redirects:
     #previous/page: new-folder/page.md
     #
     #index.md - redirect_from: ./downloads.html

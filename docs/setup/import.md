@@ -139,7 +139,7 @@ lakefs import --with-merge lakefs://example-repo -m s3://example-bucket/path/to/
 1. You can download the `lakefs` binary from [here](https://github.com/treeverse/lakeFS/releases). Make sure you choose one compatible with your installation of lakeFS.
 1. Use a configuration file like the one used to start your lakeFS installation. This will be used to access your database. An example can be found [here](http://localhost:4000/reference/configuration.html#example-aws-deployment).
 
-{% hint style="warn" %}
+{% hint style="warning" %}
 **Warning:** the *import-from-inventory* branch should only be used by lakeFS. You should not make any operations on it.
 {% endhint %}
 
