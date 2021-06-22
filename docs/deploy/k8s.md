@@ -15,12 +15,12 @@ Instructions for creating the database can be found on the deployment instructio
 lakeFS can be easily installed on Kubernetes using a [Helm chart](https://github.com/treeverse/charts/tree/master/charts/lakefs).
 To install lakeFS with Helm:
 
-1. Copy the Helm values file relevant to your storage provider:
+#### Copy the Helm values file relevant to your storage provider:
 
 {% tabs %}
 
 {% tab title="S3" %}
-	    
+        
 ```yaml
 secrets:
     # replace DATABASE_CONNECTION_STRING with the connection string of the database you created in a previous step.
@@ -95,13 +95,13 @@ lakefsConfig: |
 
 {% endtabs %}
 
-{:start=2}
-1. Fill in the missing values and save the file as `conf-values.yaml`. For more configuration options, see our Helm chart [README](https://github.com/treeverse/charts/blob/master/charts/lakefs/README.md#custom-configuration).
+#### Fill in the missing values and save the file as `conf-values.yaml`.
+    For more configuration options, see our Helm chart [README](https://github.com/treeverse/charts/blob/master/charts/lakefs/README.md#custom-configuration).
 
     The `lakefsConfig` parameter is the lakeFS configuration documented [here](https://docs.lakefs.io/reference/configuration.html), but without sensitive information.
     Sensitive information like `databaseConnectionString` is given through separate parameters, and the chart will inject them into Kubernetes secrets.
 
-1. In the directory where you created `conf-values.yaml`, run the following commands:
+#### In the directory where you created `conf-values.yaml`, run the following commands:
 
     ```bash
     # Add the lakeFS repository
