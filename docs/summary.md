@@ -1,5 +1,6 @@
 # Table of contents
 
+* [What is lakeFS](index.md)
 * Quickstart
   * [Install lakeFS](quickstart/installing.md)
   * [Create a Repository](quickstart/repository.md)
