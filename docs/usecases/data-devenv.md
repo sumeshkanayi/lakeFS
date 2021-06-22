@@ -23,7 +23,7 @@ Once testing is completed, and you have achieved the desired result, you can del
 
 _Creating a testing branch:_
 
-```shell
+```bash
 lakectl branch create \
    lakefs://example-repo/testing-spark-3 \
    --source lakefs://example-repo/main
@@ -33,7 +33,7 @@ lakectl branch create \
 
 _Resetting changes to a branch:_
 
-```shell
+```bash
 lakectl branch reset lakefs://example-repo/testing-spark-3
 # are you sure you want to reset all uncommitted changes?: y█
 ```
