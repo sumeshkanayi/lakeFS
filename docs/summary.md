@@ -1,6 +1,6 @@
 # Table of contents
 
-* [Quickstart](quickstart/index.md)
+* Quickstart
   * [Install lakeFS](quickstart/installing.md)
   * [Create a Repository](quickstart/repository.md)
   * [Add Data](quickstart/aws_cli.md)

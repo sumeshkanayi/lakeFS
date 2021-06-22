@@ -1,3 +1,7 @@
+---
+description: In this guide, we’re going to run an initial setup and then create a new repository using lakeFS
+---
+
 # Create a Repository
 
 ## Create the first user

@@ -1,3 +1,7 @@
+---
+description: In this section we will learn how to configure and use AWS CLI to manage data with the lakeFS Server
+---
+
 # Add Data
 
 In this section we'll review how to copy files into lakeFS using the AWS CLI.

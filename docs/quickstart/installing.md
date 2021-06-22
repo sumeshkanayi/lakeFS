@@ -1,3 +1,7 @@
+---
+description: Installing lakeFS is easy. This section covers how to install lakeFS using docker compose
+---
+
 # Install lakeFS
 
 {% include learn_only.html %} 

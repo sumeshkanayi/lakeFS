@@ -1,3 +1,7 @@
+---
+description: This guide will help you deploy your production lakeFS environment on GCP
+---
+
 # Deploy lakeFS on GCP
 
 Expected deployment time: 25min

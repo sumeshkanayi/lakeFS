@@ -1,3 +1,7 @@
+---
+description: This guide will help you deploy your production lakeFS environment on Azure
+---
+
 # Deploy lakeFS on Azure
 
 Expected deployment time: 25min

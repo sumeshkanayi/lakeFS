@@ -1,3 +1,7 @@
+---
+description: This guide will help you deploy your production lakeFS environment on Kubernetes using a helm chart
+---
+
 # Deploy lakeFS on Kubernetes
 
 ## Database
@@ -18,13 +22,73 @@ To install lakeFS with Helm:
      <li><a href="#helm-tabs-3">Azure Blob</a></li>
    </ul>
    <div markdown="1" id="helm-tabs-1">      
-   {% include_relative includes/aws-helm-values.md %}
+
+```yaml
+secrets:
+    # replace DATABASE_CONNECTION_STRING with the connection string of the database you created in a previous step.
+    # e.g. postgres://postgres:myPassword@my-lakefs-db.rds.amazonaws.com:5432/lakefs
+    databaseConnectionString: [DATABASE_CONNECTION_STRING]
+    # replace this with a randomly-generated string
+    authEncryptSecretKey: [ENCRYPTION_SECRET_KEY]
+lakefsConfig: |
+    blockstore:
+      type: s3
+      s3:
+        region: us-east-1
+    gateways:
+      s3:
+        # replace this with the host you will use for the lakeFS S3-compatible endpoint:
+        domain_name: [S3_GATEWAY_DOMAIN]
+```
+
    </div>
    <div markdown="1" id="helm-tabs-2">
-   {% include_relative includes/gcp-helm-values.md %}
+
+```yaml
+secrets:
+    # replace DATABASE_CONNECTION_STRING with the connection string of the database you created in a previous step.
+    # e.g.: postgres://postgres:myPassword@localhost/postgres:5432
+    databaseConnectionString: [DATABASE_CONNECTION_STRING]
+    # replace this with a randomly-generated string
+    authEncryptSecretKey: [ENCRYPTION_SECRET_KEY]
+lakefsConfig: |
+    blockstore:
+      type: gs
+    # Uncomment the following lines to give lakeFS access to your buckets using a service account:
+    # gs:
+    #   credentials_json: [YOUR SERVICE ACCOUNT JSON STRING]
+    gateways:
+      s3:
+        # replace this with the host you will use for the lakeFS S3-compatible endpoint:
+        domain_name: [S3_GATEWAY_DOMAIN]
+```
+   **Notes for running lakeFS on GKE**
+   * To connect to your database, you need to use one of the ways of [connecting GKE to Cloud SQL](https://cloud.google.com/sql/docs/mysql/connect-kubernetes-engine#cloud-sql-auth-proxy-with-workload-identity).
+   * To give lakeFS access to your bucket, you can start the cluster in [storage-rw](https://cloud.google.com/container-registry/docs/access-control#gke) mode. Alternatively, you can use a service account JSON string by uncommenting the `gs.credentials_json` property in the following yaml.
+
    </div>
    <div markdown="1" id="helm-tabs-3">
-   {% include_relative includes/azure-helm-values.md %}
+
+```yaml
+secrets:
+    # replace this with the connection string of the database you created in a previous step:
+    databaseConnectionString: [DATABASE_CONNECTION_STRING]
+    # replace this with a randomly-generated string
+    authEncryptSecretKey: [ENCRYPTION_SECRET_KEY]
+lakefsConfig: |
+    blockstore:
+      type: azure
+      azure:
+        auth_method: msi # msi for active directory, access-key for access key 
+     #  In case you chose to authenticate via access key unmark the following rows and insert the values from the previous step 
+     #  storage_account: [your storage account]
+     #  storage_access_key: [your access key]
+    gateways:
+      s3:
+        # replace this with the host you will use for the lakeFS S3-compatible endpoint:
+        domain_name: s3.lakefs.example.com
+```
+
    </div>
    </div>
 

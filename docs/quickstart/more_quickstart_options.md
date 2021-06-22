@@ -1,3 +1,6 @@
+---
+description: Quickstart options. This section outlines additional quickstart options to deploying lakeFS
+---
 
 # More Quickstart Options
 

@@ -1,3 +1,7 @@
+---
+description: This guide will help you deploy your production lakeFS environment on AWS
+---
+
 # Deploy lakeFS on AWS
 
 Expected deployment time: 25min
