@@ -1,22 +1,8 @@
----
-layout: default
-title: On AWS
-parent: Deploy lakeFS
-description: 
-nav_order: 10
-redirect_from:
-   - ../deploying-aws/index.html
-   - ../deploying-aws/install.html
-   - ../deploying-aws/db.html
-   - ../deploying-aws/lb_dns.html
----
-
 # Deploy lakeFS on AWS
-{: .no_toc }
+
 Expected deployment time: 25min
 
 ## Table of contents
-{: .no_toc .text-delta }
 
 1. TOC
 {:toc}
@@ -24,6 +10,7 @@ Expected deployment time: 25min
 {% include_relative includes/prerequisites.md %}
 
 ## Creating the Database on AWS RDS
+
 lakeFS requires a PostgreSQL database to synchronize actions on your repositories.
 We will show you how to create a database on AWS RDS, but you can use any PostgreSQL database as long as it's accessible by your lakeFS installation.
 
@@ -40,6 +27,7 @@ If you already have a database, take note of the connection string and skip to t
 ## Installation Options
 
 ### On EC2
+
 1. Save the following configuration file as `config.yaml`:
 
    ```yaml
@@ -85,14 +73,15 @@ docker run \
 See the [reference](../reference/configuration.md#using-environment-variables) for a complete list of environment variables.
 
 ### On EKS
+
 See [Kubernetes Deployment](./k8s.md).
 
 ## Load balancing
+
 Depending on how you chose to install lakeFS, you should have a load balancer direct requests to the lakeFS server.  
 By default, lakeFS operates on port 8000, and exposes a `/_health` endpoint which you can use for health checks.
 
 ### Notes for using an AWS Application Load Balancer
-{: .no_toc }
 
 1. Your security groups should allow the load balancer to access the lakeFS server.
 1. Create a target group with a listener for port 8000.
