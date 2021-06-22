@@ -4,9 +4,10 @@ description: This guide will help you deploy your production lakeFS environment 
 
 # Deploy lakeFS on GCP
 
-Expected deployment time: 25min
+_Expected deployment time: 25min_
 
 ## Creating the Database on GCP SQL
+
 lakeFS requires a PostgreSQL database to synchronize actions on your repositories.
 We will show you how to create a database on Google Cloud SQL, but you can use any PostgreSQL database as long as it's accessible by your lakeFS installation.
 
@@ -24,6 +25,7 @@ For example, if you install lakeFS on GKE, you need to deploy the SQL Auth Proxy
 ## Installation Options
 
 ### On Google Compute Engine
+
 1. Save the following configuration file as `config.yaml`:
 
    ```yaml
@@ -74,7 +76,7 @@ See the [reference](../reference/configuration.md#using-environment-variables) f
 
 See [Kubernetes Deployment](./k8s.md).
 
-## Load balancing
+## Load Balancing
 
 Depending on how you chose to install lakeFS, you should have a load balancer direct requests to the lakeFS server.  
 By default, lakeFS operates on port 8000, and exposes a `/_health` endpoint which you can use for health checks.

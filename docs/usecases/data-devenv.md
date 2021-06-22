@@ -1,9 +1,5 @@
 ---
-layout: default
-title: Data Development Environment
-parent: Use-Cases
 description: lakeFS enables a safe development environment on your data lake without the need to copy or mock data
-nav_order: 25
 ---
 
 
@@ -83,3 +79,4 @@ _Reading from a historic version (a previous commit) using Spark_
    ```scala
    // represents the data as existed at commit "~79RU9aUsQ9GLnU":
    spark.read.parquet("s3://example-repo/~79RU9aUsQ9GLnU/events/by-date")
+   ```

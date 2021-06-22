@@ -4,7 +4,7 @@ description: This guide will help you deploy your production lakeFS environment 
 
 # Deploy lakeFS on Azure
 
-Expected deployment time: 25min
+_Expected deployment time: 25min_
 
 ## Creating the Database on Azure Database
 lakeFS requires a PostgreSQL database to synchronize actions on your repositories.
@@ -50,10 +50,11 @@ If you already have a database, take note of the connection string and skip to t
    ```bash
    lakefs --config config.yaml run
    ```
-   **Note:** it is preferable to run the binary as a service using systemd or your operating system's facilities.
+  **Note:** it is preferable to run the binary as a service using systemd or your operating system's facilities.
 1. To support Azure AD authentication go to `Identity` tab and switch `Status` toggle to on, then add the `Storage Blob Data Contributor' role on the container you created.
 
 ### On Azure Container instances
+
 To support container-based environments like Azure Container Instances, lakeFS can be configured using environment variables. Here is a `docker run`
 command to demonstrate starting lakeFS using Docker:
 
@@ -73,13 +74,16 @@ docker run \
 See the [reference](../reference/configuration.md#using-environment-variables) for a complete list of environment variables.
 
 ### On AKS
+
 See [Kubernetes Deployment](./k8s.md).
 
-## Load balancing
+## Load Balancing
+
 Depending on how you chose to install lakeFS, you should have a load balancer direct requests to the lakeFS server.  
 By default, lakeFS operates on port 8000, and exposes a `/_health` endpoint which you can use for health checks.
 
 ## DNS
+
 As mentioned above, you should create 3 DNS records for lakeFS:
 1. One record for the lakeFS API: `lakefs.example.com`
 1. Two records for the S3-compatible API: `s3.lakefs.example.com` and `*.s3.lakefs.example.com`.
@@ -87,4 +91,5 @@ As mentioned above, you should create 3 DNS records for lakeFS:
 Depending on your DNS provider, refer to the documentation on how to add CNAME records.
 
 ## Next Steps
+
 Your next step is to [prepare your storage](../setup/storage/index.md). If you already have a storage bucket/container, you are ready to [create your first lakeFS repository](../setup/create-repo.md).

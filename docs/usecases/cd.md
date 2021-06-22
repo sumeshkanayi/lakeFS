@@ -1,12 +1,10 @@
 ---
-layout: default
-title: Continuous Data Deployment
-parent: Use-Cases
 description: lakeFS helps you continuously validate expectations and assumptions from the data itself.
 nav_order: 45
 ---
 
 ## Continuous Deployment
+
 Not every day we introduce new data to the lake, or add/change ETLs, but we do have recurring jobs that are running, and updates to our existing data collections. Even if  the code and infra didn't change, the data might, and those changes introduce quality issues. This is one of the complexities of a data product, the data we consume changes over the course of a month, a week, or even a single day. 
 
 **Examples of changes to data that may occur:**

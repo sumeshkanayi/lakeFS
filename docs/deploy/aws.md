@@ -4,7 +4,7 @@ description: This guide will help you deploy your production lakeFS environment 
 
 # Deploy lakeFS on AWS
 
-Expected deployment time: 25min
+_Expected deployment time: 25min_
 
 ## Creating the Database on AWS RDS
 

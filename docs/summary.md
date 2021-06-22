@@ -29,6 +29,11 @@
   * [import](setup/import.md)
   * [create-repo](setup/create-repo.md)
 
+* Use Cases
+  * [Data Development Environment](usecases/data-devenv.md)
+  * [Continuous Data Integration](usecases/ci.md)
+  * [Continuous Data Deployment](usecases/cd.md)
+
 * [understand](understand/README.md)
   * [Architecture Overview](understand/architecture.md)
   * [index](understand/index.md)
@@ -71,11 +76,6 @@
   * [Using lakeFS with SageMaker](integrations/sagemaker.md)
   * [Using lakeFS with MinIO](integrations/minio.md)
   * [glue\_hive\_metastore](integrations/glue_hive_metastore.md)
-* [usecases](usecases/README.md)
-  * [index](usecases/index.md)
-  * [Continuous Data Integration](usecases/ci.md)
-  * [Continuous Deployment](usecases/cd.md)
-  * [Data Development Environment](usecases/data-devenv.md)
 * [FAQ](faq.md)
 * [slack](slack/README.md)
   * [index](slack/index.md)

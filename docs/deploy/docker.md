@@ -14,14 +14,10 @@ Instructions for creating the database can be found on the deployment instructio
 
 To deploy using Docker, create a yaml configuration file.
 Here is a minimal example, but you can see the [reference](../reference/configuration.md#example-aws-deployment) for the full list of configurations.
-<div class="tabs">
-<ul>
-  <li><a href="#docker-tabs-1">AWS</a></li>
-  <li><a href="#docker-tabs-2">Google Cloud</a></li>
-  <li><a href="#docker-tabs-3">Microsoft Azure</a></li>
-</ul>
-<div markdown="1" id="docker-tabs-1">      
 
+{% tabs %}
+
+{% tab title="AWS" %}
 ```yaml
 database:
   connection_string: "[DATABASE_CONNECTION_STRING]"
@@ -34,10 +30,8 @@ gateways:
   s3:
     domain_name: "[S3_GATEWAY_DOMAIN]"
 ```
-
-</div>
-<div markdown="1" id="docker-tabs-2">
-
+{% endtab %}
+{% tab title="Google Cloud" %}
 ```yaml
 database:
   connection_string: "[DATABASE_CONNECTION_STRING]"
@@ -53,10 +47,8 @@ gateways:
   s3:
     domain_name: "[S3_GATEWAY_DOMAIN]"
 ```
-
-</div>
-<div markdown="1" id="docker-tabs-3">
-
+{% endtab %}
+{% tab title="Microsoft Azure" %}
 ```yaml
 database:
   connection_string: "postgres://user:pass@<AZURE_POSTGRES_SERVER_NAME>..."
@@ -74,9 +66,9 @@ gateways:
   s3:
     domain_name: s3.lakefs.example.com
 ```
+{% endtab %}
+{% endtabs %}
 
-</div>
-</div>
 
 Save the configuration file locally as `lakefs-config.yaml` and run the following command:
 

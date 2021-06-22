@@ -1,7 +1,4 @@
 ---
-layout: default
-title: Continuous Data Integration
-parent: Use-Cases
 description: lakeFS enables to continuously test newly ingested data to ensure data quality requirements are met
 nav_order: 35
 ---
@@ -12,7 +9,7 @@ Everyday data lake  management includes ingestion of new data collections, and a
 
 ### Example 1: Pre-merge hooks - enforce best practices
 
-Examples of good practices enforced in organizations:  
+Examples of good practices enforced in organizations:
 
  - No user_* columns except under /private/...
  - Only `(*.parquet | *.orc | _delta_log/*.json)` files allowed
