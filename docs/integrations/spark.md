@@ -239,7 +239,7 @@ using the S3 gateway, when using the lakeFS-specific Hadoop FileSystem you confi
 access the S3 underlying object storage, and `lakefs` to access the lakeFS server.  When
 running on AWS you do not need to configure credentials if the instance profile has sufficient
 permissions.
-{% hintend %}
+{% endhint %}
 
 Here is how to do it:
 {% tabs %}
