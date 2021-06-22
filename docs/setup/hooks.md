@@ -7,6 +7,7 @@ description: lakeFS allows the configuration of hooks to trigger when predefined
 Like other version control systems, lakeFS allows the configuration of `Actions` to trigger when predefined events occur.
  
 Supported Events:
+
 1. `pre_commit` - Action runs when the commit occurs, before the commit is finalized.
 1. `pre_merge` - Action runs when the merge occurs, before the merge is finalized.
  
@@ -93,8 +94,9 @@ in the repository branch where the action occurred.
 A failure to parse an `Action` file will result with a failing `Run`. 
  
 For example, lakeFS will search and execute all matching `Action` files with the prefix `lakefs://repo1/feature-1/_lakefs_actions/` on:
+
 1. Commit to `feature-1` branch on `repo1` repository. 
-2. Merge to `main` branch from `feature-1` branch on `repo1` repository.
+1. Merge to `main` branch from `feature-1` branch on `repo1` repository.
 
 ## Runs API & CLI
 
@@ -105,6 +107,7 @@ The endpoint also allows to download the execution log of any executed `Hook` un
 ### Result Files 
 
 There are 2 types of files that are stored in the metadata section of lakeFS repository with each `Run`:
+
 1. `_lakefs/actions/log/<runID>/<hookRunID>.log` - Execution log of the specific `Hook` run.
 1. `_lakefs/actions/log/<runID>/run.manifest` - Manifest with all `Hooks` execution for the run with their results and additional metadata.
 
