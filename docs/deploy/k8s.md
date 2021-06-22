@@ -21,46 +21,46 @@ To install lakeFS with Helm:
 
 {% tab title="S3" %}
     
-    ```yaml
-    secrets:
-        # replace DATABASE_CONNECTION_STRING with the connection string of the database you created in a previous step.
-        # e.g. postgres://postgres:myPassword@my-lakefs-db.rds.amazonaws.com:5432/lakefs
-        databaseConnectionString: [DATABASE_CONNECTION_STRING]
-        # replace this with a randomly-generated string
-        authEncryptSecretKey: [ENCRYPTION_SECRET_KEY]
-    lakefsConfig: |
-        blockstore:
-          type: s3
-          s3:
-            region: us-east-1
-        gateways:
-          s3:
-            # replace this with the host you will use for the lakeFS S3-compatible endpoint:
-            domain_name: [S3_GATEWAY_DOMAIN]
-    ```
+```yaml
+secrets:
+    # replace DATABASE_CONNECTION_STRING with the connection string of the database you created in a previous step.
+    # e.g. postgres://postgres:myPassword@my-lakefs-db.rds.amazonaws.com:5432/lakefs
+    databaseConnectionString: [DATABASE_CONNECTION_STRING]
+    # replace this with a randomly-generated string
+    authEncryptSecretKey: [ENCRYPTION_SECRET_KEY]
+lakefsConfig: |
+    blockstore:
+      type: s3
+      s3:
+        region: us-east-1
+    gateways:
+      s3:
+        # replace this with the host you will use for the lakeFS S3-compatible endpoint:
+        domain_name: [S3_GATEWAY_DOMAIN]
+```
     
 {% endtab %}
 
 {% tab title="GCS" %}
 
-    ```yaml
-    secrets:
-        # replace DATABASE_CONNECTION_STRING with the connection string of the database you created in a previous step.
-        # e.g.: postgres://postgres:myPassword@localhost/postgres:5432
-        databaseConnectionString: [DATABASE_CONNECTION_STRING]
-        # replace this with a randomly-generated string
-        authEncryptSecretKey: [ENCRYPTION_SECRET_KEY]
-    lakefsConfig: |
-        blockstore:
-          type: gs
-        # Uncomment the following lines to give lakeFS access to your buckets using a service account:
-        # gs:
-        #   credentials_json: [YOUR SERVICE ACCOUNT JSON STRING]
-        gateways:
-          s3:
-            # replace this with the host you will use for the lakeFS S3-compatible endpoint:
-            domain_name: [S3_GATEWAY_DOMAIN]
-    ```
+```yaml
+secrets:
+    # replace DATABASE_CONNECTION_STRING with the connection string of the database you created in a previous step.
+    # e.g.: postgres://postgres:myPassword@localhost/postgres:5432
+    databaseConnectionString: [DATABASE_CONNECTION_STRING]
+    # replace this with a randomly-generated string
+    authEncryptSecretKey: [ENCRYPTION_SECRET_KEY]
+lakefsConfig: |
+    blockstore:
+      type: gs
+    # Uncomment the following lines to give lakeFS access to your buckets using a service account:
+    # gs:
+    #   credentials_json: [YOUR SERVICE ACCOUNT JSON STRING]
+    gateways:
+      s3:
+        # replace this with the host you will use for the lakeFS S3-compatible endpoint:
+        domain_name: [S3_GATEWAY_DOMAIN]
+```
 
     **Notes for running lakeFS on GKE**
 
@@ -71,25 +71,25 @@ To install lakeFS with Helm:
 
 {% tab title="Azure Blob" %}
 
-    ```yaml
-    secrets:
-        # replace this with the connection string of the database you created in a previous step:
-        databaseConnectionString: [DATABASE_CONNECTION_STRING]
-        # replace this with a randomly-generated string
-        authEncryptSecretKey: [ENCRYPTION_SECRET_KEY]
-    lakefsConfig: |
-        blockstore:
-          type: azure
-          azure:
-            auth_method: msi # msi for active directory, access-key for access key 
-         #  In case you chose to authenticate via access key unmark the following rows and insert the values from the previous step 
-         #  storage_account: [your storage account]
-         #  storage_access_key: [your access key]
-        gateways:
-          s3:
-            # replace this with the host you will use for the lakeFS S3-compatible endpoint:
-            domain_name: s3.lakefs.example.com
-    ```
+```yaml
+secrets:
+    # replace this with the connection string of the database you created in a previous step:
+    databaseConnectionString: [DATABASE_CONNECTION_STRING]
+    # replace this with a randomly-generated string
+    authEncryptSecretKey: [ENCRYPTION_SECRET_KEY]
+lakefsConfig: |
+    blockstore:
+      type: azure
+      azure:
+        auth_method: msi # msi for active directory, access-key for access key 
+     #  In case you chose to authenticate via access key unmark the following rows and insert the values from the previous step 
+     #  storage_account: [your storage account]
+     #  storage_access_key: [your access key]
+    gateways:
+      s3:
+        # replace this with the host you will use for the lakeFS S3-compatible endpoint:
+        domain_name: s3.lakefs.example.com
+```
 
 {% endtab %}
 
