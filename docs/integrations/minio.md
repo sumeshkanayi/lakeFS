@@ -1,11 +1,5 @@
 ---
-layout: default
-title: MinIO
 description: This section covers how to use MinIO as the underlying storage for lakeFS.
-parent: Integrations
-nav_order: 47
-has_children: false
-redirect_from: ../using/minio.html
 ---
 
 # Using lakeFS with MinIO
@@ -29,5 +23,3 @@ blockstore:
 The full example can be found [here](https://docs.lakefs.io/reference/configuration.html#example-minio).
 
 Note that lakeFS can also be configured [using environment variables](https://docs.lakefs.io/reference/configuration.html#using-environment-variables).
-
-

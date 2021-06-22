@@ -1,23 +1,10 @@
 ---
-layout: default
-title: Databricks
 description: This section explains how to interact with your lakeFS data from Databricks
-parent: Integrations
-nav_order: 60
-has_children: false
-redirect_from: ../using/databricks.html
 ---
 
 # Using lakeFS with Databricks
-{: .no_toc }
 
 [Databricks](https://databricks.com/) is an Apache Spark-based analytics platform.  
-
-## Table of contents
-{: .no_toc .text-delta }
-
-1. TOC
-{:toc}
 
 ## Configuration
 
@@ -89,4 +76,5 @@ df.write
 The data is now created in lakeFS as new changes in your branch. You can now commit these changes, or revert them.
 
 ## Case Study: SimilarWeb
+
 See how SimilarWeb integrated [lakeFS with DataBricks](https://similarweb.engineering/data-versioning-for-customer-reports-using-databricks-and-lakefs/).

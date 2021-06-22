@@ -1,38 +1,29 @@
 ---
-layout: default
-title: Hive
 description: This section covers how you can start using lakeFS with Apache Hive, a distributed data warehouse system that enables analytics at a massive scale.
-parent: Integrations
-nav_order: 25
-has_children: false
-redirect_from: ../using/hive.html
 ---
 
 # Using lakeFS with Hive
-{: .no_toc }
+
 The [Apache Hive ™](https://hive.apache.org/) data warehouse software facilitates reading, writing, and managing large datasets residing in distributed storage using SQL. Structure can be projected onto data already in storage. A command line tool and JDBC driver are provided to connect users to Hive.
 
-## Table of contents
-{: .no_toc .text-delta }
-
-1. TOC
-{:toc .pb-5 }
-
-
 ## Configuration
+
 In order to configure hive to work with lakeFS we will set the lakeFS credentials in the corresponding S3 credential fields.
     
-lakeFS endpoint: ```fs.s3a.endpoint``` 
+lakeFS endpoint: `fs.s3a.endpoint` 
 
-lakeFS access key: ```fs.s3a.access.key```
+lakeFS access key: `fs.s3a.access.key`
 
-lakeFS secret key: ```fs.s3a.secret.key```
+lakeFS secret key: `fs.s3a.secret.key`
 
- **Note** 
- In the following examples we set AWS credentials at runtime, for clarity. In production, these properties should be set using one of Hadoop's standard ways of [Authenticating with S3](https://hadoop.apache.org/docs/current/hadoop-aws/tools/hadoop-aws/index.html#Authenticating_with_S3). 
- {: .note}
+
+{% hint style="info" %}
+**Note** 
+In the following examples we set AWS credentials at runtime, for clarity. In production, these properties should be set using one of Hadoop's standard ways of [Authenticating with S3](https://hadoop.apache.org/docs/current/hadoop-aws/tools/hadoop-aws/index.html#Authenticating_with_S3). 
+{% endhint %}
  
-For example, we could add the configurations to the file ``` hdfs-site.xml```:
+For example, we could add the configurations to the file `hdfs-site.xml`:
+
 ```xml
 <configuration>
     ...
@@ -64,6 +55,7 @@ CREATE TABLE example.request_logs (
     user_agent string
 );
 ```
+
 ### Example with external table
 
 ```hql
@@ -74,7 +66,3 @@ CREATE EXTERNAL TABLE request_logs (
     user_agent string
 ) LOCATION 's3a://example/main/request_logs' ;
 ```
-
-
-
-

@@ -1,25 +1,13 @@
 ---
-layout: default
-title: Boto (Python)
 description: This section covers how you can start using lakeFS with Boto (Python), the AWS SDK for Python.
-parent: Integrations
-nav_order: 45
-has_children: false
-redirect_from: ../using/boto.html
 ---
 
 # Using lakeFS with Boto (Python)
-{: .no_toc }
-
-## Table of contents
-{: .no_toc .text-delta }
-
-1. TOC
-{:toc}
 
 ## Creating a Boto client
 
 Create a Boto3 S3 client with your lakeFS endpoint and key-pair:
+
 ```python
 import boto3
 s3 = boto3.client('s3',
@@ -28,10 +16,10 @@ s3 = boto3.client('s3',
     aws_secret_access_key='wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY')
 ```
 
-
 ## Usage Examples
 
 ### Put Object
+
 Use a branch name and a path to put an object in lakeFS:
 
 ```python
@@ -58,7 +46,9 @@ for obj in list_resp['Contents']:
 ```
 
 ### Head Object
+
 Get object metadata using branch and path:
+
 ```python
 s3.head_object(Bucket='example-repo', Key='main/example-file.parquet')
 # output:

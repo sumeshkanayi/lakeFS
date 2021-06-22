@@ -1,26 +1,15 @@
 ---
-layout: default
-title: Copying Data with DistCp
 description: Apache Hadoop DistCp is a tool used for large inter/intra-cluster copying. You can easily use it with your lakeFS repositories.
-parent: Integrations
-nav_order: 5
-has_children: false
-redirect_from: ../using/distcp.html
 ---
 
 # Copying Data to/from lakeFS with DistCp
-{: .no_toc }
 
 Apache Hadoop [DistCp](https://hadoop.apache.org/docs/current/hadoop-distcp/DistCp.html) (distributed copy) is a tool used for large inter/intra-cluster copying. You can easily use it with your lakeFS repositories.
-## Table of contents
-{: .no_toc .text-delta }
 
-1. TOC
-{:toc}
-
+{% hint style="info" %}
 **Note** 
 In the following examples we set AWS credentials on the command line, for clarity. In production, these properties should be set using one of Hadoop's standard ways of [Authenticating with S3](https://hadoop.apache.org/docs/current/hadoop-aws/tools/hadoop-aws/index.html#Authenticating_with_S3). 
-{: .note}
+{% endhint %}
 
 
 ## Copying from lakeFS to lakeFS
@@ -36,14 +25,18 @@ hadoop distcp \
   "s3a://example-repo-2/main/example-file.parquet"
 ```
 
+```scala
 val workDir = s"s3a://${repo}/${branch}/collection/shows"
 val dataPath = s"$workDir/title.basics.parquet"
+```
 
 ## Copying between S3 and lakeFS
+
 In order to copy between an S3 bucket and lakeFS repository, use Hadoop's [per-bucket configuration](https://hadoop.apache.org/docs/current/hadoop-aws/tools/hadoop-aws/index.html#Configuring_different_S3_buckets_with_Per-Bucket_Configuration).
 In the following examples, replace the first access key pair with your lakeFS key pair, and the second one with your AWS IAM key pair:
 
 ### From S3 to lakeFs
+
 ```bash
 hadoop distcp \
   -Dfs.s3a.bucket.example-repo.access.key="AKIAIOSFODNN7EXAMPLE" \
@@ -56,6 +49,7 @@ hadoop distcp \
 ```
 
 ### From lakeFS to S3
+
 ```bash
 hadoop distcp \
   -Dfs.s3a.bucket.example-repo.access.key="AKIAIOSFODNN7EXAMPLE" \
