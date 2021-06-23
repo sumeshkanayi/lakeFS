@@ -1,8 +1,5 @@
 # Documentation for lakeFS API
 
-[test1](test/actions.md)
-[**test2**](test/actions.md)
-
 <a name="documentation-for-api-endpoints"></a>
 ## Documentation for API Endpoints
 
@@ -10,13 +7,6 @@ All URIs are relative to *http://localhost/api/v1*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
-*ActionsApi* | [**getRun**](Apis/ActionsApi.md) | **GET** /repositories/{repository}/actions/runs/{run_id} | get a run
-*ActionsApi* | [**getRunHookOutput**](Apis/ActionsApi.md#getrunhookoutput) | **GET** /repositories/{repository}/actions/runs/{run_id}/hooks/{hook_run_id}/output | get run hook output
-*ActionsApi* | [**listRepositoryRuns**](Apis/ActionsApi.md#listrepositoryruns) | **GET** /repositories/{repository}/actions/runs | list runs
-*ActionsApi* | [**listRunHooks**](Apis/ActionsApi.md#listrunhooks) | **GET** /repositories/{repository}/actions/runs/{run_id}/hooks | list run hooks
-*AuthApi* | [**addGroupMembership**](Apis/AuthApi.md#addgroupmembership) | **PUT** /auth/groups/{groupId}/members/{userId} | add group membership
-*AuthApi* | [**attachPolicyToGroup**](Apis/AuthApi.md#attachpolicytogroup) | **PUT** /auth/groups/{groupId}/policies/{policyId} | attach policy to group
-*AuthApi* | [**attachPolicyToUser**](Apis/AuthApi.md#attachpolicytouser) | **PUT** /auth/users/{userId}/policies/{policyId} | attach policy to user
 *ActionsApi* | [**getRun**](Apis/ActionsApi.md#getrun) | **GET** /repositories/{repository}/actions/runs/{run_id} | get a run
 *ActionsApi* | [**getRunHookOutput**](Apis/ActionsApi.md#getrunhookoutput) | **GET** /repositories/{repository}/actions/runs/{run_id}/hooks/{hook_run_id}/output | get run hook output
 *ActionsApi* | [**listRepositoryRuns**](Apis/ActionsApi.md#listrepositoryruns) | **GET** /repositories/{repository}/actions/runs | list runs
