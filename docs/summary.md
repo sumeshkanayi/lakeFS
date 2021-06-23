@@ -146,3 +146,5 @@
 * [Contributing](contributing.md)
 
 * [FAQ](faq.md)
+
+{% include "./more.md" %}
