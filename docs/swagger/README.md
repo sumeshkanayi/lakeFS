@@ -7,7 +7,7 @@ All URIs are relative to *http://localhost/api/v1*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
-*ActionsApi* | [**getRun**](swagger/Apis/ActionsApi.md#getrun) | **GET** /repositories/{repository}/actions/runs/{run_id} | get a run
+*ActionsApi* | [**getRun**](/swagger/Apis/ActionsApi.md#getrun) | **GET** /repositories/{repository}/actions/runs/{run_id} | get a run
 *ActionsApi* | [**getRunHookOutput**](Apis/ActionsApi.md#getrunhookoutput) | **GET** /repositories/{repository}/actions/runs/{run_id}/hooks/{hook_run_id}/output | get run hook output
 *ActionsApi* | [**listRepositoryRuns**](Apis/ActionsApi.md#listrepositoryruns) | **GET** /repositories/{repository}/actions/runs | list runs
 *ActionsApi* | [**listRunHooks**](Apis/ActionsApi.md#listrunhooks) | **GET** /repositories/{repository}/actions/runs/{run_id}/hooks | list run hooks
