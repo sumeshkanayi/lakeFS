@@ -64,7 +64,6 @@
   * [Glue/Hive Metastore](integrations/glue_hive_metastore.md)
   * [Glue ETL](integrations/glue_etl.md)
   * [Kafka](integrations/kakfa.md)
-  * [MapReduce](integrations/mapreduce.md)
   * [SageMaker](integrations/sagemaker.md)
 
 * Understanding lakeFS
