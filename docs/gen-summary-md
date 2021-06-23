@@ -11,6 +11,7 @@ api_toc() {
     done
 }
 
+cd $(dirname $0)
 cat <<EOS
 # Table of contents
 
