@@ -3,11 +3,9 @@
 <a name="documentation-for-api-endpoints"></a>
 ## Documentation for API Endpoints
 
-All URIs are relative to *http://localhost/api/v1*
-
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
-*ActionsApi* | [**getRun**](apis/ActionsApi.md#getrun) | **GET** /repositories/{repository}/actions/runs/{run_id} | get a run
+*ActionsApi* | [getRun](apis/ActionsApi.md#getrun) | **GET** /repositories/{repository}/actions/runs/{run_id} | get a run
 *ActionsApi* | [**getRunHookOutput**](apis/ActionsApi.md#getrunhookoutput) | **GET** /repositories/{repository}/actions/runs/{run_id}/hooks/{hook_run_id}/output | get run hook output
 *ActionsApi* | [**listRepositoryRuns**](apis/ActionsApi.md#listrepositoryruns) | **GET** /repositories/{repository}/actions/runs | list runs
 *ActionsApi* | [**listRunHooks**](apis/ActionsApi.md#listrunhooks) | **GET** /repositories/{repository}/actions/runs/{run_id}/hooks | list run hooks
