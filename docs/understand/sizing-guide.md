@@ -1,36 +1,24 @@
 ---
-layout: default
-title: Sizing Guide
-parent: Understanding lakeFS
 description: This page provides a detailed sizing guide for deploying lakeFS
-nav_order: 30
-has_children: false
-redirect_from:
-    - ../architecture/sizing-guide.html
 ---
 # Sizing guide
-{: .no_toc }
-
-
-## Table of contents
-{: .no_toc .text-delta }
-
-1. TOC
-{:toc}
 
 ## System Requirements
 
 ### Operating Systems and ISA
+
 lakeFS can run on MacOS and Linux (Windows binaries are available but not rigorously tested - 
 we don't recommend deploying lakeFS to production on Windows).
 x86_64 and arm64 architectures are supported for both MacOS and Linux.
 
 ### Memory and CPU requirements
+
 lakeFS servers require a minimum of 512mb of RAM and 1 CPU core. 
 For high throughput, additional CPUs help scale requests across different cores. 
 "Expensive" operations such as large diff or commit operations can take advantage of multiple cores. 
 
 ### Network
+
 If using the data APIs such as the [S3 Gateway](architecture.md#s3-gateway), 
 lakeFS will require enough network bandwidth to support the planned concurrent network upload/download operations.
 For most cloud providers, more powerful machines (i.e. more expensive and usually with more CPU cores) also provide increased network bandwidth.
@@ -39,6 +27,7 @@ If using only the metadata APIs (for example, only using the Hadoop/Spark client
 at roughly 1Kb per request.
 
 ### Disk
+
 lakeFS greatly benefits from fast local disks. 
 A lakeFS instance doesn't require any strong durability guarantees from the underlying storage, 
 as the disk is only ever used as a local caching layer for lakeFS metadata, and not for long-term storage.
@@ -59,6 +48,7 @@ lakeFS uses a PostgreSQL instance to manage branch references, authentication an
 and to keep track of currently uncommitted data across branches.
 
 #### Storage
+
 The dataset stored in PostgreSQL is relatively modest, 
 as most metadata is pushed down into the object store. 
 Required storage is mostly a factor of the amount of uncommitted writes across all branches at any given point in time: 
@@ -67,6 +57,7 @@ in the range of 150 MiB per every 100,000 uncommitted writes.
 We recommend starting at 10 GiB for a production deployment, as it will likely be more than enough.
 
 #### RAM and `shared_buffers`
+
 Since the data size is small, it is recommended to provide enough memory to hold the vast majority of that data in RAM:
 Ideally configure [shared_buffers](https://www.postgresql.org/docs/current/runtime-config-resource.html#GUC-SHARED-BUFFERS) 
 of your PostgreSQL instances to be large enough to contain the currently active dataset. 
@@ -84,7 +75,7 @@ PostgreSQL CPU cores help scale concurrent requests. 1 CPU core for every 5,000 
 ## Scaling factors
 
 Scaling lakeFS, like most data systems, moves across 2 axes: 
-throughput of requests (amount per given timeframe), and latency (time to complete a single request).
+throughput of requests (amount per given time frame), and latency (time to complete a single request).
 
 ### Understanding latency and throughput considerations
 
@@ -136,7 +127,7 @@ in a given commit. Paths are requested randomly from a file containing a set of 
 
 **command executed:** 
 
-```shell
+```bash
 lakectl abuse random-read \
     --from-file randomly_selected_paths.txt \
     --amount 500000 \
@@ -144,7 +135,9 @@ lakectl abuse random-read \
     lakefs://example-repo/<commit hash>
 ```
 
+{% hint style="info" %}
 **Note** lakeFS version <= v0.33.1 uses '@' (instead of '/') as separator between repository and commit hash.
+{% endhint %}
 
 **Result Histogram (raw):**
 
@@ -191,7 +184,9 @@ lakectl abuse random-write \
     lakefs://example-repo/main
 ```
 
+{% hint style="info" %}
 **Note** lakeFS version <= v0.33.1 uses '@' (instead of '/') as separator between repository and branch.
+{% endhint %}
 
 
 **Result Histogram (raw):**
@@ -239,7 +234,9 @@ lakectl abuse create-branches \
     lakefs://example-repo/<commit hash>
 ```
 
+{% hint style="info" %}
 **Note** lakeFS version <= v0.33.1 uses '@' (instead of '/') as separator between repository and commit hash.
+{% endhint %}
 
 **Result Histogram (raw):**
 

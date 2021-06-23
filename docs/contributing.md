@@ -1,9 +1,5 @@
 ---
-layout: default
-title: Contributing
 description: lakeFS community welcomes your contribution. To make the process as seamless as possible, we recommend you read this contribution guide.
-nav_order: 55
-has_children: false
 ---
 
 # Contributing to lakeFS
@@ -33,7 +29,7 @@ Working on your first Pull Request? You can learn how from this free series, [Ho
 
 *This section was tested on macOS and Linux (Fedora 32, Ubuntu 20.04) - Your mileage may vary*
 
-   
+
 Our [Go release workflow](https://github.com/treeverse/lakeFS/blob/master/.github/workflows/goreleaser.yaml) holds the Go and Node.js versions we currently use under _go-version_ and _node-version_ compatibly.  The Java workflows use [Maven 3.8.1](https://github.com/actions/virtual-environments/blob/main/images/linux/Ubuntu2004-README.md) (but any recent version of Maven should work).
 
 1. Install the required dependencies for your OS:
@@ -45,23 +41,23 @@ Our [Go release workflow](https://github.com/treeverse/lakeFS/blob/master/.githu
     1. [Maven](https://maven.apache.org/) to build and test Spark client codes.
     1. *Optional* - [PostgreSQL 11](https://www.postgresql.org/docs/11/tutorial-install.html) (useful for running and debugging locally)
 1. Install statik:
-   
-   ```shell
+
+   ```bash
    go get github.com/rakyll/statik 
    ```
-   
+
    Make sure `(go env GOPATH)/bin` is in your `$PATH` (or at least, that the `statik` binary is). 
-   
+
 1. Clone the repository from https://github.com/treeverse/lakeFS (gives you read-only access to the repository. To contribute, see the next section).
 1. Build the project:
-   
-   ```shell
+
+   ```bash
    make build
    ```
-   
+
 1. Make sure tests are passing:
-   
-   ```shell
+
+   ```bash
    make test 
    ```
 
@@ -77,15 +73,15 @@ Our [Go release workflow](https://github.com/treeverse/lakeFS/blob/master/.githu
 
 Once you've made the necessary changes to the code, make sure tests pass:
 
-   ```shell
-   make test 
-   ```
+```bash
+make test 
+```
 
 Check linting rules are passing:
 
-   ```shell
-   make checks-validator
-   ```
+```bash
+make checks-validator
+```
 
 lakeFS uses [go fmt](https://golang.org/cmd/gofmt/) as a style guide for Go code.
 

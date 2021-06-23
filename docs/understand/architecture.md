@@ -1,23 +1,8 @@
 ---
-layout: default
-title: Architecture
-parent: Understanding lakeFS
 description: lakeFS architecture overview. Learn more about lakeFS components, including its S3 API gateway.
-nav_order: 10
-has_children: false
-redirect_from:
-    - ../architecture/index.html
-    - ../architecture/overview.html
 ---
+
 # Architecture Overview
-{: .no_toc }
-
-
-## Table of contents
-{: .no_toc .text-delta }
-
-1. TOC
-{:toc}
 
 ## Overview
 
@@ -59,7 +44,7 @@ The Auth service handles creation, management and validation of user credentials
 
 The credential scheme, along with the request signing logic are compatible with AWS IAM (both [SIGv2](https://docs.aws.amazon.com/general/latest/gr/signature-version-2.html) and [SIGv4](https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html)).
 
-Currently, the auth service manages its own database of users and credentials and does not use IAM in any way. 
+Currently, the authentication service manages its own database of users and credentials and does not use IAM in any way. 
 
 ### Frontend UI
 

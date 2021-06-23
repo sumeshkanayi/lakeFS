@@ -27,8 +27,6 @@
   * [Import](setup/import.md)
   * [Hooks](setup/hooks.md)
 
-  * [Importing data from S3](setup/import-mvcc.md)
-
 * Use Cases
   * [Data Development Environment](usecases/data-devenv.md)
   * [Continuous Data Integration](usecases/ci.md)
@@ -67,22 +65,16 @@
   * [Glue ETL](integrations/glue_etl.md)
   * [Kafka](integrations/kakfa.md)
   * [MapReduce](integrations/mapreduce.md)
-  * [SageMaker](integrations/sagemaker.md)  
+  * [SageMaker](integrations/sagemaker.md)
 
-* [understand](understand/README.md)
-  * [Architecture Overview](understand/architecture.md)
-  * [index](understand/index.md)
-  * [Sizing guide](understand/sizing-guide.md)
+* Understanding lakeFS
+  * [Architecture](understand/architecture.md)
   * [Data Model](understand/data-model.md)
-  * [Licensing](understand/licensing.md)
   * [Branching Model](understand/branching-model.md)
+  * [Sizing Guide](understand/sizing-guide.md)
   * [Roadmap](understand/roadmap.md)
+  * [Licensing](understand/licensing.md)
+
+* [Contributing](contributing.md)
+
 * [FAQ](faq.md)
-* [slack](slack/README.md)
-  * [index](slack/index.md)
-* [\_site](_site/README.md)
-  * [deploying-aws](_site/deploying-aws/README.md)
-    * [monitor](_site/deploying-aws/monitor.md)
-* [Contributing to lakeFS](contributing.md)
-
-

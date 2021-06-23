@@ -1,21 +1,8 @@
 ---
-layout: default
-title: Data Model
-parent: Understanding lakeFS
 description: This page explains the lakeFS Data Model
-nav_order: 20
-has_children: false
-redirect_from: ../architecture/data-model.html
 ---
+
 # Data Model
-{: .no_toc }
-
-
-## Table of contents
-{: .no_toc .text-delta }
-
-1. TOC
-{:toc}
 
 ## Overview
 
@@ -49,8 +36,8 @@ A Graveler file itself is content-addressable, i.e. similarly to Git, the name o
 File identity is calculated based on the identity of the ValueRecords the file contains:
 
 
-<b>valueRecordID = h(h(valueRecord.key) || h(valueRecord.Identity))</b><br/>
-<b>fileID = h(valueRecordID<sub>1</sub> + … + valueRecordID<sub>N</sub>)</b>
+> valueRecordID = h(h(valueRecord.key) || h(valueRecord.Identity))
+> fileID = h(valueRecordID<sub>1</sub> + … + valueRecordID<sub>N</sub>)
 
 ## Constructing a consistent view of the keyspace (i.e., a commit)
 
@@ -90,6 +77,7 @@ On the object store, ranges are stored in the following hierarchy:
 
 *Note: this relatively flat structure could be modified in the future: looking at the diagram above, it imposes no real limitations on the depth of the tree. A tree could easily be made recursive by having Meta Ranges point to other Meta Ranges - and still provide all the same characteristics. For simplicity, we decided to start with a fixed 2-level hierarchy.*
 
+
 ## Representing references and uncommitted data
 
 Unlike committed data which is immutable, uncommitted (or "staged") data experiences frequent random writes and is very mutable in nature. This is also true for "refs" - in particular, branches, which are simply pointers to an underlying commit, are modified frequently: on every commit or merge operation.
@@ -102,5 +90,5 @@ References and uncommitted data are currently stored on PostgreSQL for its stron
 
 [In the future](roadmap.md#lakefs-on-the-rocks-milestone-3---remove-postgresql) we plan on eliminating the need for an RDBMS by embedding [Raft](https://raft.github.io/) to replicate these writes across a cluster of machines, with the data itself being stored in RocksDB. To make operations easier, the replicated RocksDB database will be periodically snapshotted to the underlying object store.
 
-For extremely large installations ( >= millions of read/write operations per second), it will be possible to utilize [multi-Raft](https://pingcap.com/blog/2017-08-15-multi-raft/) to shard references across a wider fleet of machines.
+For extremely large installations (>= millions of read/write operations per second), it will be possible to utilize [multi-Raft](https://pingcap.com/blog/2017-08-15-multi-raft/) to shard references across a wider fleet of machines.
 
