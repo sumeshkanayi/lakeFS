@@ -29,5 +29,6 @@ Delta Lake, Hudi and Iceberg all define dedicated, structured data formats that 
 The [Axolotl](https://en.wikipedia.org/wiki/Axolotl) – a species of salamander, also known as the Mexican Lake Monster or the Peter Pan of the animal kingdom. It's a magical creature, living in a lake, just like us :-).
 
 ![Axolotl](https://upload.wikimedia.org/wikipedia/commons/f/f6/AxolotlBE.jpg)
+
 <small>[Copyright](https://en.wikipedia.org/wiki/Axolotl#/media/File:AxolotlBE.jpg)</small>
 
