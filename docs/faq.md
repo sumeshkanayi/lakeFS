@@ -6,11 +6,11 @@ description: Frequently Asked Questions (FAQ). Have a question about lakeFS? Fin
 
 ### 1. Is lakeFS open source?
 
-lakeFS is completely free and open source and licensed under the [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0) License. We maintain a public [product roadmap](https://docs.lakefs.io/understand/roadmap.html) and [Slack channel](https://lakefs.io/slack) for open discussions.
+lakeFS is completely free and open source and licensed under the [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0) License. We maintain a public [product roadmap](understand/roadmap.md) and [Slack channel](https://lakefs.io/slack) for open discussions.
 
 ### 2. How does lakeFS data versioning work?
 
-lakeFS uses a copy-on-write mechanism to avoid data duplication. For example, creating a new branch is a metadata-only operation: no objects are actually copied. Only when an object changes does lakeFS create another version of the data in the storage. For more information, see [Data Model](https://docs.lakefs.io/understand/data-model.html).
+lakeFS uses a copy-on-write mechanism to avoid data duplication. For example, creating a new branch is a metadata-only operation: no objects are actually copied. Only when an object changes does lakeFS create another version of the data in the storage. For more information, see [Data Model](understand/data-model.md).
 
 ### 3. How do I get support for my lakeFS installation?
 
@@ -29,7 +29,5 @@ Delta Lake, Hudi and Iceberg all define dedicated, structured data formats that 
 The [Axolotl](https://en.wikipedia.org/wiki/Axolotl) – a species of salamander, also known as the Mexican Lake Monster or the Peter Pan of the animal kingdom. It's a magical creature, living in a lake, just like us :-).
 
 ![Axolotl](https://upload.wikimedia.org/wikipedia/commons/f/f6/AxolotlBE.jpg)
+<small>[Copyright](https://en.wikipedia.org/wiki/Axolotl#/media/File:AxolotlBE.jpg)</small>
 
-<small>
-[copyright](https://en.wikipedia.org/wiki/Axolotl#/media/File:AxolotlBE.jpg)
-</small>
