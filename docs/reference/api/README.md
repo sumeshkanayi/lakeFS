@@ -1,5 +1,8 @@
 # Documentation for lakeFS API
 
+[test1](test/actions.md)
+[**test2**](test/actions.md)
+
 <a name="documentation-for-api-endpoints"></a>
 ## Documentation for API Endpoints
 
