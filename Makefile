@@ -89,6 +89,7 @@ docs/assets/js/swagger.yml: api/swagger.yml
 gen-docs: go-install ## Generate CLI docs automatically
 	$(GOCMD) run cmd/lakectl/main.go docs > docs/reference/commands.md
 	$(OPENAPI_GENERATOR) generate -i /mnt/api/swagger.yml -g markdown -o /mnt/docs/reference/api
+	./doc/gen-summary-md > doc/summary.md
 
 gen-metastore: ## Run Metastore Code generation
 	@thrift -r --gen go --gen go:package_prefix=github.com/treeverse/lakefs/pkg/metastore/hive/gen-go/ -o pkg/metastore/hive pkg/metastore/hive/hive_metastore.thrift
