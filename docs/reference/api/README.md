@@ -5,6 +5,8 @@
 
 All URIs are relative to *http://localhost/api/v1*
 
+[**getRun**](./Apis/ActionsApi.md#getrun)
+
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *ActionsApi* | [**getRun**](Apis/ActionsApi.md#getrun) | **GET** /repositories/{repository}/actions/runs/{run_id} | get a run
