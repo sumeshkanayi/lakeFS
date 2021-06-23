@@ -89,6 +89,7 @@ docs/assets/js/swagger.yml: api/swagger.yml
 gen-docs: go-install ## Generate CLI docs automatically
 	$(GOCMD) run cmd/lakectl/main.go docs > docs/reference/commands.md
 	$(OPENAPI_GENERATOR) generate -i /mnt/api/swagger.yml -g markdown -o /mnt/docs/reference/api
+	sed -i~ "s/(Apis\//(.\/Apis\//g" docs/reference/api/README.md && rm docs/reference/api/README.md~
 	./docs/gen-summary-md > docs/summary.md
 
 gen-metastore: ## Run Metastore Code generation
