@@ -35,8 +35,8 @@ A simple identity could be, for example, a sha256 hash of the value’s bytes, b
 A Graveler file itself is content-addressable, i.e. similarly to Git, the name of the file is its identity.
 File identity is calculated based on the identity of the ValueRecords the file contains:
 
-<b>valueRecordID = h(h(valueRecord.key) || h(valueRecord.Identity))</b><br/>
-<b>fileID = h(valueRecordID<sub>1</sub> + … + valueRecordID<sub>N</sub>)</b>
+<br/><b>valueRecordID = h(h(valueRecord.key) || h(valueRecord.Identity))</b>
+<br/><b>fileID = h(valueRecordID<sub>1</sub> + … + valueRecordID<sub>N</sub>)</b>
 
 
 ## Constructing a consistent view of the keyspace (i.e., a commit)
