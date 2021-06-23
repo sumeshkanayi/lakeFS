@@ -33,7 +33,7 @@
   * [Continuous Data Deployment](usecases/cd.md)
 
 * Reference
-  * [API Reference](reference/api.md)
+  * [API Reference](reference/api/README.md)
   * [S3 Supported API](reference/s3.md)
   * [Configuration Reference](reference/configuration.md)
   * [Commands \(CLI\) Reference](reference/commands.md)
