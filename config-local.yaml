@@ -14,12 +14,9 @@ auth:
     secret_key: "10a718b3f285d89c36e9864494cdd1507f3bc85b342df24736ea81f9a1134bcc09e90b6641"
 
 blockstore:
-  type: manta
-  manta:
-    manta_url: https://us-east-storage.solutions.iqvia.com
-    manta_key_path: /Users/soumyanair/.ssh/id_rsa
-    manta_key_id: a7:7f:26:4c:0b:3a:ce:d7:1a:85:f5:de:b5:05:3d:16
-    manta_user: devops_dev
+  type: local
+  local:
+    path: /Users/soumyanair/lakefs-experiments/data
 
 gateways:
   s3:

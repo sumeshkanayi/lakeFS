@@ -4,10 +4,12 @@ import (
 	"context"
 	"crypto/md5" //nolint:gosec
 	"encoding/hex"
+	"encoding/pem"
 	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"os"
 	"path"
@@ -18,16 +20,24 @@ import (
 
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/google/uuid"
+	triton "github.com/joyent/triton-go/v2"
+	"github.com/joyent/triton-go/v2/authentication"
+	"github.com/joyent/triton-go/v2/storage"
 	"github.com/treeverse/lakefs/pkg/block"
+	"github.com/treeverse/lakefs/pkg/block/params"
 	"github.com/treeverse/lakefs/pkg/logging"
 )
 
-const BlockstoreType = "manta"
+const (
+	BlockstoreType   = "manta"
+	defaultMantaRoot = "/stor"
+)
 
 type Adapter struct {
-	path               string
+	client             *storage.StorageClient
 	uploadIDTranslator block.UploadIDTranslator
 	removeEmptyDir     bool
+	path               string
 }
 
 var (
@@ -49,18 +59,10 @@ func WithRemoveEmptyDir(b bool) func(a *Adapter) {
 	}
 }
 
-func NewAdapter(path string, opts ...func(a *Adapter)) (*Adapter, error) {
-	// Clean() the path so that misconfiguration does not allow path traversal.
-	path = filepath.Clean(path)
-	err := os.MkdirAll(path, 0700)
-	if err != nil {
-		return nil, err
-	}
-	if !isDirectoryWritable(path) {
-		return nil, ErrPathNotWritable
-	}
+func NewAdapter(sc *storage.StorageClient, opts ...func(a *Adapter)) (*Adapter, error) {
+
 	adapter := &Adapter{
-		path:               path,
+		client:             sc,
 		uploadIDTranslator: &block.NoOpTranslator{},
 		removeEmptyDir:     true,
 	}
@@ -75,7 +77,7 @@ func resolveNamespace(obj block.ObjectPointer) (block.QualifiedKey, error) {
 	if err != nil {
 		return qualifiedKey, err
 	}
-	if qualifiedKey.StorageType != block.StorageTypeLocal {
+	if qualifiedKey.StorageType != block.StorageTypeManta {
 		return qualifiedKey, block.ErrInvalidNamespace
 	}
 	return qualifiedKey, nil
@@ -123,57 +125,30 @@ func (l *Adapter) Path() string {
 	return l.path
 }
 
-func (l *Adapter) Put(_ context.Context, obj block.ObjectPointer, _ int64, reader io.Reader, _ block.PutOpts) error {
-	p, err := l.getPath(obj)
+func (l *Adapter) Put(ctx context.Context, obj block.ObjectPointer, size int64, reader io.Reader, _ block.PutOpts) error {
+	_, err := resolveNamespace(obj)
 	if err != nil {
 		return err
 	}
-	p = filepath.Clean(p)
-	f, err := l.maybeMkdir(p, os.Create)
-	if err != nil {
-		return err
-	}
-	defer func() {
-		_ = f.Close()
-	}()
-	_, err = io.Copy(f, reader)
+
+	metadata := make(map[string]string)
+
+	objectPathFromStorageNameSpace := strings.ReplaceAll(obj.StorageNamespace, "manta://", "")
+	objectPathWithBucket := path.Join(defaultMantaRoot, objectPathFromStorageNameSpace)
+
+	err = l.client.Objects().Put(ctx, &storage.PutObjectInput{ForceInsert: true, ObjectReader: reader, ObjectPath: path.Join(objectPathWithBucket, obj.Identifier), ContentType: metadata["content-type"], ContentMD5: metadata["content-md5"], ContentLength: uint64(size)})
+
 	return err
 }
 
-func (l *Adapter) Remove(_ context.Context, obj block.ObjectPointer) error {
-	p, err := l.getPath(obj)
-	if err != nil {
-		return err
-	}
-	p = filepath.Clean(p)
-	err = os.Remove(p)
-	if err != nil {
-		return err
-	}
-	if l.removeEmptyDir {
-		dir := filepath.Dir(p)
-		removeEmptyDirUntil(dir, l.path)
-	}
-	return nil
-}
+func (l *Adapter) Remove(ctx context.Context, obj block.ObjectPointer) error {
+	objectPathFromStorageNameSpace := strings.ReplaceAll(obj.StorageNamespace, "manta://", "")
 
-func removeEmptyDirUntil(dir string, stopAt string) {
-	if stopAt == "" {
-		return
-	}
-	if !strings.HasSuffix(stopAt, "/") {
-		stopAt += "/"
-	}
-	for strings.HasPrefix(dir, stopAt) && dir != stopAt {
-		err := os.Remove(dir)
-		if err != nil {
-			break
-		}
-		dir = filepath.Dir(dir)
-		if dir == "/" {
-			break
-		}
-	}
+	objectPathWithBucket := path.Join(defaultMantaRoot, objectPathFromStorageNameSpace, obj.Identifier)
+
+	error := l.client.Objects().Delete(ctx, &storage.DeleteObjectInput{ObjectPath: objectPathWithBucket})
+	return error
+
 }
 
 func (l *Adapter) Copy(_ context.Context, sourceObj, destinationObj block.ObjectPointer) error {
@@ -233,16 +208,13 @@ func (l *Adapter) UploadCopyPartRange(ctx context.Context, sourceObj, destinatio
 	return etag, err
 }
 
-func (l *Adapter) Get(_ context.Context, obj block.ObjectPointer, _ int64) (reader io.ReadCloser, err error) {
-	p, err := l.getPath(obj)
-	if err != nil {
-		return nil, err
-	}
-	f, err := os.OpenFile(filepath.Clean(p), os.O_RDONLY, 0600)
-	if err != nil {
-		return nil, err
-	}
-	return f, nil
+func (l *Adapter) Get(ctx context.Context, obj block.ObjectPointer, size int64) (reader io.ReadCloser, err error) {
+	bucketPathFromStorageNameSpace := strings.ReplaceAll(obj.StorageNamespace, "manta://", "")
+	objectPath := path.Join(defaultMantaRoot, bucketPathFromStorageNameSpace, obj.Identifier)
+	output, err := l.client.Objects().Get(ctx, &storage.GetObjectInput{ObjectPath: objectPath})
+	output.ContentLength = uint64(size)
+	return output.ObjectReader, err
+
 }
 
 func (l *Adapter) Walk(_ context.Context, walkOpt block.WalkOpts, walkFn block.WalkFunc) error {
@@ -272,6 +244,7 @@ func (l *Adapter) Exists(_ context.Context, obj block.ObjectPointer) (bool, erro
 }
 
 func (l *Adapter) GetRange(_ context.Context, obj block.ObjectPointer, start int64, end int64) (io.ReadCloser, error) {
+	fmt.Println("under get range")
 	p, err := l.getPath(obj)
 	if err != nil {
 		return nil, err
@@ -289,34 +262,23 @@ func (l *Adapter) GetRange(_ context.Context, obj block.ObjectPointer, start int
 	}, nil
 }
 
-func (l *Adapter) GetProperties(_ context.Context, obj block.ObjectPointer) (block.Properties, error) {
-	p, err := l.getPath(obj)
+func (l *Adapter) GetProperties(ctx context.Context, obj block.ObjectPointer) (block.Properties, error) {
+	fmt.Println("under Get properties", obj.Identifier, obj.StorageNamespace, obj.IdentifierType)
+	newPath := strings.ReplaceAll(obj.StorageNamespace, "manta://", "")
+	newPath = path.Join(defaultMantaRoot, newPath, obj.Identifier)
+	fmt.Println("new path is", newPath)
+	_, err := l.client.Objects().GetInfo(ctx, &storage.GetInfoInput{ObjectPath: newPath})
 	if err != nil {
 		return block.Properties{}, err
 	}
-	_, err = os.Stat(p)
-	if err != nil {
-		return block.Properties{}, err
-	}
+
 	// No properties, just return that it exists
 	return block.Properties{}, nil
 }
 
-// isDirectoryWritable tests that pth, which must not be controllable by user input, is a
-// writable directory.  As there is no simple way to test this in windows, I prefer the "brute
-// force" method of creating s dummy file.  Will work in any OS.  speed is not an issue, as
-// this will be activated very few times during startup.
-func isDirectoryWritable(pth string) bool {
-	f, err := ioutil.TempFile(pth, "dummy")
-	if err != nil {
-		return false
-	}
-	_ = f.Close()
-	_ = os.Remove(f.Name())
-	return true
-}
-
 func (l *Adapter) CreateMultiPartUpload(_ context.Context, obj block.ObjectPointer, _ *http.Request, _ block.CreateMultiPartUploadOpts) (string, error) {
+
+	fmt.Println("under create multipart")
 	if strings.Contains(obj.Identifier, "/") {
 		fullPath, err := l.getPath(obj)
 		if err != nil {
@@ -335,6 +297,7 @@ func (l *Adapter) CreateMultiPartUpload(_ context.Context, obj block.ObjectPoint
 }
 
 func (l *Adapter) UploadPart(ctx context.Context, obj block.ObjectPointer, _ int64, reader io.Reader, uploadID string, partNumber int64) (string, error) {
+	fmt.Println("under upload partt")
 	if err := isValidUploadID(uploadID); err != nil {
 		return "", err
 	}
@@ -483,4 +446,75 @@ func isValidUploadID(uploadID string) error {
 		return fmt.Errorf("%w: %s", ErrInvalidUploadIDFormat, err)
 	}
 	return nil
+}
+
+func NewMantaClient(mantaConfig params.Manta) *storage.StorageClient {
+
+	keyID := mantaConfig.MantaKeyID
+	accountName := os.Getenv("TRITON_ACCOUNT")
+	keyMaterial := mantaConfig.MantaKeyPath
+	userName := mantaConfig.MantaUser
+
+	var signer authentication.Signer
+	var err error
+
+	if keyMaterial == "" {
+		input := authentication.SSHAgentSignerInput{
+			KeyID:       keyID,
+			AccountName: accountName,
+			Username:    userName,
+		}
+		signer, err = authentication.NewSSHAgentSigner(input)
+		if err != nil {
+			log.Fatalf("Error Creating SSH Agent Signer: {{err}}", err)
+		}
+	} else {
+		var keyBytes []byte
+		if _, err = os.Stat(keyMaterial); err == nil {
+			keyBytes, err = ioutil.ReadFile(keyMaterial)
+			if err != nil {
+				log.Fatalf("Error reading key material from %s: %s",
+					keyMaterial, err)
+			}
+			block, _ := pem.Decode(keyBytes)
+			if block == nil {
+				log.Fatalf(
+					"Failed to read key material '%s': no key found", keyMaterial)
+			}
+
+			if block.Headers["Proc-Type"] == "4,ENCRYPTED" {
+				log.Fatalf(
+					"Failed to read key '%s': password protected keys are\n"+
+						"not currently supported. Please decrypt the key prior to use.", keyMaterial)
+			}
+
+		} else {
+			keyBytes = []byte(keyMaterial)
+		}
+
+		input := authentication.PrivateKeySignerInput{
+			KeyID:              keyID,
+			PrivateKeyMaterial: keyBytes,
+			AccountName:        accountName,
+			Username:           userName,
+		}
+		signer, err = authentication.NewPrivateKeySigner(input)
+		if err != nil {
+			log.Fatalf("Error Creating SSH Private Key Signer: {{err}}", err)
+		}
+	}
+
+	config := &triton.ClientConfig{
+		MantaURL:    mantaConfig.MantaUrl,
+		AccountName: mantaConfig.MantaUser,
+		Username:    "",
+		Signers:     []authentication.Signer{signer},
+	}
+
+	c, err := storage.NewClient(config)
+	if err != nil {
+		log.Fatalf("compute.NewClient: %s", err)
+	}
+
+	return c
 }

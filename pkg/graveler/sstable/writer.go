@@ -127,6 +127,7 @@ func (dw *DiskWriter) Abort() error {
 }
 
 func (dw *DiskWriter) Close() (*committed.WriteResult, error) {
+
 	// Before closing, we write all user supplied metadata keys and values to the hash
 	// This is done to avoid collisions, especially on empty sstables that might hash to the same value otherwise.
 	ident.MarshalStringMap(dw.hash, dw.props)
@@ -143,10 +144,12 @@ func (dw *DiskWriter) Close() (*committed.WriteResult, error) {
 	dw.SetMetadata(MetadataEstimatedSizeKey, fmt.Sprint(dw.w.EstimatedSize()))
 
 	if err := dw.w.Close(); err != nil {
+
 		return nil, fmt.Errorf("sstable close (%s): %w", sstableID, err)
 	}
 
 	if err := dw.fh.Store(dw.ctx, sstableID); err != nil {
+
 		return nil, fmt.Errorf("sstable store (%s): %w", sstableID, err)
 	}
 

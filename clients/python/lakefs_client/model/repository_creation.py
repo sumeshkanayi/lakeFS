@@ -63,7 +63,7 @@ class RepositoryCreation(ModelNormal):
         },
         ('storage_namespace',): {
             'regex': {
-                'pattern': r'^(s3|gs|https?|mem|local|transient):\/\/.*$',  # noqa: E501
+                'pattern': r'^(s3|gs|https?|mem|manta|local|transient):\/\/.*$',  # noqa: E501
             },
         },
     }

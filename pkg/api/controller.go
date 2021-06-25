@@ -1112,7 +1112,6 @@ func (c *Controller) CreateRepository(w http.ResponseWriter, r *http.Request, bo
 		writeError(w, http.StatusBadRequest, "error creating repository: could not access storage namespace")
 		return
 	}
-
 	newRepo, err := c.Catalog.CreateRepository(ctx, body.Name, body.StorageNamespace, defaultBranch)
 	if err != nil {
 		handleAPIError(w, fmt.Errorf("error creating repository: %w", err))
@@ -1133,7 +1132,6 @@ func ensureStorageNamespaceRW(ctx context.Context, adapter block.Adapter, storag
 		dummyKey  = "dummy"
 		dummyData = "this is dummy data - created by lakeFS in order to check accessibility"
 	)
-
 	obj := block.ObjectPointer{StorageNamespace: storageNamespace, Identifier: dummyKey}
 	objLen := int64(len(dummyData))
 	err := adapter.Put(ctx, obj, objLen, strings.NewReader(dummyData), block.PutOpts{})
@@ -2305,7 +2303,11 @@ func (c *Controller) GetObject(w http.ResponseWriter, r *http.Request, repositor
 	defer func() {
 		_ = reader.Close()
 	}()
-	w.Header().Set("Content-Length", fmt.Sprint(entry.Size))
+
+	if c.BlockAdapter.BlockstoreType() != "manta" {
+		w.Header().Set("Content-Length", fmt.Sprint(entry.Size))
+	}
+
 	etag := httputil.ETag(entry.Checksum)
 	w.Header().Set("ETag", etag)
 	lastModified := httputil.HeaderTimestamp(entry.CreationDate)

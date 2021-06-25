@@ -53,6 +53,7 @@ require (
 	github.com/jamiealquiza/tachymeter v2.0.0+incompatible
 	github.com/jedib0t/go-pretty v4.3.0+incompatible
 	github.com/johannesboyne/gofakes3 v0.0.0-20210217223559-02ffa763be97
+	github.com/joyent/triton-go/v2 v2.0.0-pre3 
 	github.com/klauspost/compress v1.11.12 // indirect
 	github.com/kr/pretty v0.2.1 // indirect
 	github.com/lunixbochs/vtclean v1.0.0 // indirect

@@ -157,9 +157,12 @@ func (tfs *TierFS) store(ctx context.Context, namespace, originalPath, nsPath, f
 	if err := tfs.adapter.Put(ctx, tfs.objPointer(namespace, filename), stat.Size(), f, block.PutOpts{}); err != nil {
 		return fmt.Errorf("adapter put %s %s: %w", namespace, filename, err)
 	}
+	//sumesh manta api closes reader by default handling here explicitly
 
-	if err := f.Close(); err != nil {
-		return fmt.Errorf("closing file %s: %w", filename, err)
+	if tfs.adapter.BlockstoreType() != "manta" {
+		if err := f.Close(); err != nil {
+			return fmt.Errorf("closing file %s: %w", filename, err)
+		}
 	}
 
 	fileRef := tfs.newLocalFileRef(namespace, nsPath, filename)

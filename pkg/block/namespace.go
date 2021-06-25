@@ -15,6 +15,7 @@ const (
 	StorageTypeS3
 	StorageTypeGS
 	StorageTypeAzure
+	StorageTypeManta
 )
 
 var (
@@ -22,6 +23,7 @@ var (
 )
 
 func (s StorageType) String() string {
+
 	scheme := ""
 	switch s {
 	case StorageTypeMem:
@@ -34,6 +36,8 @@ func (s StorageType) String() string {
 		scheme = "s3"
 	case StorageTypeAzure:
 		scheme = "https"
+	case StorageTypeManta:
+		scheme = "manta"
 	default:
 		panic("unknown storage type")
 	}
@@ -62,6 +66,7 @@ func (qk QualifiedKey) Format() string {
 }
 
 func GetStorageType(namespaceURL *url.URL) (StorageType, error) {
+
 	var st StorageType
 	switch namespaceURL.Scheme {
 	case "s3":
@@ -74,6 +79,9 @@ func GetStorageType(namespaceURL *url.URL) (StorageType, error) {
 		return StorageTypeGS, nil
 	case "http", "https":
 		return StorageTypeAzure, nil
+	case "manta":
+		return StorageTypeManta, nil
+
 	default:
 		return st, fmt.Errorf("%s: %w", namespaceURL.Scheme, ErrInvalidNamespace)
 	}
@@ -116,12 +124,17 @@ func ResolveNamespace(defaultNamespace, key string, identifierType IdentifierTyp
 }
 
 func resolveFull(key string) (QualifiedKey, error) {
+
 	parsedKey, err := url.ParseRequestURI(key)
+
 	if err != nil {
+
 		return QualifiedKey{}, fmt.Errorf("key isn't a valid address: %w", err)
 	}
 	// extract its scheme
+
 	storageType, err := GetStorageType(parsedKey)
+
 	if err != nil {
 		return QualifiedKey{}, err
 	}
@@ -154,6 +167,7 @@ func resolveRelative(defaultNamespace, key string) (QualifiedKey, error) {
 func resolveNamespaceUnknown(defaultNamespace, key string) (QualifiedKey, error) {
 	// first try to treat key as a full path
 	if qk, err := resolveFull(key); err == nil {
+		fmt.Println("returning at 175")
 		return qk, nil
 	}
 

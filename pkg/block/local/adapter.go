@@ -51,6 +51,7 @@ func WithRemoveEmptyDir(b bool) func(a *Adapter) {
 
 func NewAdapter(path string, opts ...func(a *Adapter)) (*Adapter, error) {
 	// Clean() the path so that misconfiguration does not allow path traversal.
+
 	path = filepath.Clean(path)
 	err := os.MkdirAll(path, 0700)
 	if err != nil {
@@ -91,6 +92,7 @@ func (l *Adapter) verifyPath(p string) error {
 }
 
 func (l *Adapter) getPath(identifier block.ObjectPointer) (string, error) {
+
 	obj, err := resolveNamespace(identifier)
 	if err != nil {
 		return "", err
@@ -99,6 +101,7 @@ func (l *Adapter) getPath(identifier block.ObjectPointer) (string, error) {
 	if err = l.verifyPath(p); err != nil {
 		return "", err
 	}
+
 	return p, nil
 }
 
@@ -141,6 +144,7 @@ func (l *Adapter) Put(_ context.Context, obj block.ObjectPointer, _ int64, reade
 }
 
 func (l *Adapter) Remove(_ context.Context, obj block.ObjectPointer) error {
+
 	p, err := l.getPath(obj)
 	if err != nil {
 		return err
@@ -204,6 +208,7 @@ func (l *Adapter) Copy(_ context.Context, sourceObj, destinationObj block.Object
 }
 
 func (l *Adapter) UploadCopyPart(ctx context.Context, sourceObj, destinationObj block.ObjectPointer, uploadID string, partNumber int64) (string, error) {
+
 	if err := isValidUploadID(uploadID); err != nil {
 		return "", err
 	}
@@ -219,6 +224,7 @@ func (l *Adapter) UploadCopyPart(ctx context.Context, sourceObj, destinationObj 
 }
 
 func (l *Adapter) UploadCopyPartRange(ctx context.Context, sourceObj, destinationObj block.ObjectPointer, uploadID string, partNumber, startPosition, endPosition int64) (string, error) {
+
 	if err := isValidUploadID(uploadID); err != nil {
 		return "", err
 	}
@@ -246,6 +252,7 @@ func (l *Adapter) Get(_ context.Context, obj block.ObjectPointer, _ int64) (read
 }
 
 func (l *Adapter) Walk(_ context.Context, walkOpt block.WalkOpts, walkFn block.WalkFunc) error {
+
 	p := filepath.Clean(path.Join(l.path, walkOpt.StorageNamespace, walkOpt.Prefix))
 	return filepath.Walk(p, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
@@ -257,6 +264,7 @@ func (l *Adapter) Walk(_ context.Context, walkOpt block.WalkOpts, walkFn block.W
 }
 
 func (l *Adapter) Exists(_ context.Context, obj block.ObjectPointer) (bool, error) {
+
 	p, err := l.getPath(obj)
 	if err != nil {
 		return false, err
@@ -335,6 +343,7 @@ func (l *Adapter) CreateMultiPartUpload(_ context.Context, obj block.ObjectPoint
 }
 
 func (l *Adapter) UploadPart(ctx context.Context, obj block.ObjectPointer, _ int64, reader io.Reader, uploadID string, partNumber int64) (string, error) {
+
 	if err := isValidUploadID(uploadID); err != nil {
 		return "", err
 	}
@@ -346,6 +355,7 @@ func (l *Adapter) UploadPart(ctx context.Context, obj block.ObjectPointer, _ int
 }
 
 func (l *Adapter) AbortMultiPartUpload(_ context.Context, obj block.ObjectPointer, uploadID string) error {
+
 	if err := isValidUploadID(uploadID); err != nil {
 		return err
 	}
@@ -360,6 +370,7 @@ func (l *Adapter) AbortMultiPartUpload(_ context.Context, obj block.ObjectPointe
 }
 
 func (l *Adapter) CompleteMultiPartUpload(_ context.Context, obj block.ObjectPointer, uploadID string, multipartList *block.MultipartUploadCompletion) (*string, int64, error) {
+
 	if err := isValidUploadID(uploadID); err != nil {
 		return nil, -1, err
 	}
@@ -458,6 +469,7 @@ func (l *Adapter) getPartFiles(uploadID string, obj block.ObjectPointer) ([]stri
 }
 
 func (l *Adapter) ValidateConfiguration(_ context.Context, _ string) error {
+
 	return nil
 }
 
@@ -466,14 +478,17 @@ func (l *Adapter) GenerateInventory(_ context.Context, _ logging.Logger, _ strin
 }
 
 func (l *Adapter) BlockstoreType() string {
+
 	return BlockstoreType
 }
 
 func (l *Adapter) GetStorageNamespaceInfo() block.StorageNamespaceInfo {
+
 	return block.DefaultStorageNamespaceInfo(BlockstoreType)
 }
 
 func (l *Adapter) RuntimeStats() map[string]string {
+
 	return nil
 }
 
