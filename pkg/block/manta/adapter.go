@@ -1,8 +1,7 @@
 package manta
 
 import (
-	"context"
-	"crypto/md5" //nolint:gosec
+	"context" //nolint:gosec
 	"encoding/hex"
 	"encoding/pem"
 	"errors"
@@ -14,12 +13,10 @@ import (
 	"os"
 	"path"
 	"path/filepath"
-	"strconv"
 	"strings"
 
 	"regexp"
 
-	"github.com/aws/aws-sdk-go/service/s3"
 	triton "github.com/joyent/triton-go/v2"
 	"github.com/joyent/triton-go/v2/authentication"
 	"github.com/joyent/triton-go/v2/storage"
@@ -37,8 +34,7 @@ const (
 type Adapter struct {
 	client             *storage.StorageClient
 	uploadIDTranslator block.UploadIDTranslator
-
-	path string
+	accountName        string
 }
 
 var (
@@ -56,11 +52,12 @@ func WithTranslator(t block.UploadIDTranslator) func(a *Adapter) {
 }
 */
 
-func NewAdapter(sc *storage.StorageClient, opts ...func(a *Adapter)) (*Adapter, error) {
+func NewAdapter(sc *storage.StorageClient, accountName string, opts ...func(a *Adapter)) (*Adapter, error) {
 
 	adapter := &Adapter{
 		client:             sc,
 		uploadIDTranslator: &block.NoOpTranslator{},
+		accountName:        accountName,
 	}
 	for _, opt := range opts {
 		opt(adapter)
@@ -79,18 +76,6 @@ func resolveNamespace(obj block.ObjectPointer) (block.QualifiedKey, error) {
 	return qualifiedKey, nil
 }
 
-// verifyPath ensures that p is under the directory controlled by this adapter.  It does not
-// examine the filesystem and can mistakenly error out when symbolic links are involved.
-func (l *Adapter) verifyPath(p string) error {
-	if !strings.HasPrefix(filepath.Clean(p), l.path) {
-		return fmt.Errorf("%s: %w", p, ErrBadPath)
-	}
-	return nil
-}
-
-// maybeMkdir verifies path is allowed and runs f(path), but if f fails due to file-not-found
-// MkdirAll's its dir and then runs it again.
-
 func (l *Adapter) Put(ctx context.Context, obj block.ObjectPointer, size int64, reader io.Reader, _ block.PutOpts) error {
 	_, err := resolveNamespace(obj)
 	if err != nil {
@@ -102,9 +87,8 @@ func (l *Adapter) Put(ctx context.Context, obj block.ObjectPointer, size int64, 
 	objectPathFromStorageNameSpace := strings.ReplaceAll(obj.StorageNamespace, "manta://", "")
 	objectPathWithBucket := path.Join(defaultMantaRoot, objectPathFromStorageNameSpace)
 
-	err = l.client.Objects().Put(ctx, &storage.PutObjectInput{ForceInsert: true, ObjectReader: reader, ObjectPath: path.Join(objectPathWithBucket, obj.Identifier), ContentType: metadata["content-type"], ContentMD5: metadata["content-md5"], ContentLength: uint64(size)})
+	return l.client.Objects().Put(ctx, &storage.PutObjectInput{ForceInsert: true, ObjectReader: reader, ObjectPath: path.Join(objectPathWithBucket, obj.Identifier), ContentType: metadata["content-type"], ContentMD5: metadata["content-md5"], ContentLength: uint64(size)})
 
-	return err
 }
 
 func (l *Adapter) Remove(ctx context.Context, obj block.ObjectPointer) error {
@@ -112,8 +96,7 @@ func (l *Adapter) Remove(ctx context.Context, obj block.ObjectPointer) error {
 
 	objectPathWithBucket := path.Join(defaultMantaRoot, objectPathFromStorageNameSpace, obj.Identifier)
 
-	error := l.client.Objects().Delete(ctx, &storage.DeleteObjectInput{ObjectPath: objectPathWithBucket})
-	return error
+	return l.client.Objects().Delete(ctx, &storage.DeleteObjectInput{ObjectPath: objectPathWithBucket})
 
 }
 
@@ -161,7 +144,7 @@ func (l *Adapter) Get(ctx context.Context, obj block.ObjectPointer, size int64) 
 }
 
 func (l *Adapter) Walk(_ context.Context, walkOpt block.WalkOpts, walkFn block.WalkFunc) error {
-	p := filepath.Clean(path.Join(l.path, walkOpt.StorageNamespace, walkOpt.Prefix))
+	p := filepath.Clean(path.Join("/tmp", walkOpt.StorageNamespace, walkOpt.Prefix))
 	return filepath.Walk(p, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
@@ -171,12 +154,19 @@ func (l *Adapter) Walk(_ context.Context, walkOpt block.WalkOpts, walkFn block.W
 	})
 }
 
-func (l *Adapter) Exists(_ context.Context, obj block.ObjectPointer) (bool, error) {
-	return true, nil
+func (l *Adapter) Exists(ctx context.Context, obj block.ObjectPointer) (bool, error) {
+	bucketPathFromStorageNameSpace := strings.ReplaceAll(obj.StorageNamespace, "manta://", "")
+	objectPath := path.Join(defaultMantaRoot, bucketPathFromStorageNameSpace, obj.Identifier)
+
+	_, err := l.client.Objects().Get(ctx, &storage.GetObjectInput{ObjectPath: objectPath})
+	if err != nil {
+		return false, err
+	}
+
+	return true, err
 }
 
 func (l *Adapter) GetRange(_ context.Context, obj block.ObjectPointer, start int64, end int64) (io.ReadCloser, error) {
-	fmt.Println("under get range")
 	p := "/tmp/test.txt"
 	f, err := os.Open(filepath.Clean(p))
 	if err != nil {
@@ -192,11 +182,9 @@ func (l *Adapter) GetRange(_ context.Context, obj block.ObjectPointer, start int
 }
 
 func (l *Adapter) GetProperties(ctx context.Context, obj block.ObjectPointer) (block.Properties, error) {
-	fmt.Println("under Get properties", obj.Identifier, obj.StorageNamespace, obj.IdentifierType)
-	newPath := strings.ReplaceAll(obj.StorageNamespace, "manta://", "")
-	newPath = path.Join(defaultMantaRoot, newPath, obj.Identifier)
-	fmt.Println("new path is", newPath)
-	_, err := l.client.Objects().GetInfo(ctx, &storage.GetInfoInput{ObjectPath: newPath})
+	objectPathFromStorageNameSpace := strings.ReplaceAll(obj.StorageNamespace, "manta://", "")
+	objectPathWithBucket := path.Join(defaultMantaRoot, objectPathFromStorageNameSpace, obj.Identifier)
+	_, err := l.client.Objects().GetInfo(ctx, &storage.GetInfoInput{ObjectPath: objectPathWithBucket})
 	if err != nil {
 		return block.Properties{}, err
 	}
@@ -206,15 +194,12 @@ func (l *Adapter) GetProperties(ctx context.Context, obj block.ObjectPointer) (b
 }
 
 func (l *Adapter) translateMantaUploadIDtoHex(uploadID string) string {
-	fmt.Println("translate", strings.ReplaceAll(uploadID, "-", ""))
 
 	return strings.ReplaceAll(uploadID, "-", "")
 
 }
 
 func (l *Adapter) translateUploadIDToMantaFormat(uploadID string) string {
-
-	fmt.Println("to manta", uploadID)
 
 	var outputStringArray []string
 	pathMetadata := regexp.MustCompile(mantaUploadIDRegex)
@@ -224,86 +209,73 @@ func (l *Adapter) translateUploadIDToMantaFormat(uploadID string) string {
 		outputStringArray = append(outputStringArray, matches[index])
 
 	}
-	fmt.Println("to manta", strings.Join(outputStringArray, "-"))
 	return strings.Join(outputStringArray, "-")
 
 }
 
 func (l *Adapter) CreateMultiPartUpload(ctx context.Context, obj block.ObjectPointer, _ *http.Request, _ block.CreateMultiPartUploadOpts) (string, error) {
 
-	fmt.Println("under create multipart", obj.Identifier, obj.StorageNamespace)
 	objectPathFromStorageNameSpace := strings.ReplaceAll(obj.StorageNamespace, "manta://", "")
 	objectPathWithBucket := path.Join(defaultMantaRoot, objectPathFromStorageNameSpace, obj.Identifier)
 
-	fmt.Println("PATH IS", objectPathWithBucket)
 	mBody := storage.CreateMpuBody{ObjectPath: objectPathWithBucket}
-	fmt.Println("mbody is", mBody.ObjectPath)
 	cmo, err := l.client.Objects().CreateMultipartUpload(ctx, &storage.CreateMpuInput{Body: mBody, ForceInsert: true})
 	if err != nil {
-		fmt.Println("error aayedaaaa", err)
 		return "", nil
 	}
-	fmt.Println("cmo id is", cmo.Id)
 
-	fmt.Println("translated id is", l.uploadIDTranslator.SetUploadID(l.translateMantaUploadIDtoHex(cmo.Id)))
 	return l.uploadIDTranslator.SetUploadID(l.translateMantaUploadIDtoHex(cmo.Id)), nil
 }
 
 func (l *Adapter) UploadPart(ctx context.Context, obj block.ObjectPointer, _ int64, reader io.Reader, uploadID string, partNumber int64) (string, error) {
-	fmt.Println("under upload partt")
-	fmt.Println("under upload partt", uploadID)
 
 	if err := isValidUploadID(uploadID); err != nil {
 		return "", err
 	}
 
-	md5Read := block.NewHashingReader(reader, block.HashFunctionMD5)
+	//md5Read := block.NewHashingReader(reader, block.HashFunctionMD5)
 
-	lp, err := l.client.Objects().UploadPart(ctx, &storage.UploadPartInput{Id: l.translateUploadIDToMantaFormat(uploadID), PartNum: uint64(partNumber), ContentMD5: hex.EncodeToString(md5Read.Md5.Sum(nil))})
-	fmt.Println("err is error")
-	//fName := uploadID + fmt.Sprintf("-%05d", partNumber)
-	//	err := l.Put(ctx, block.ObjectPointer{StorageNamespace: obj.StorageNamespace, Identifier: fName}, -1, md5Read, block.PutOpts{})
+	lp, err := l.client.Objects().UploadPart(ctx, &storage.UploadPartInput{Id: l.translateUploadIDToMantaFormat(uploadID), PartNum: uint64(partNumber), ObjectReader: reader})
 
 	return lp.Part, err
 }
 
-func (l *Adapter) AbortMultiPartUpload(_ context.Context, obj block.ObjectPointer, uploadID string) error {
+func (l *Adapter) AbortMultiPartUpload(ctx context.Context, obj block.ObjectPointer, uploadID string) error {
 
-	return nil
+	return l.client.Objects().AbortMultipartUpload(ctx, &storage.AbortMpuInput{PartsDirectoryPath: path.Join(l.accountName, "uploads", uploadID[:3], uploadID)})
+
 }
 
 func (l *Adapter) CompleteMultiPartUpload(ctx context.Context, obj block.ObjectPointer, uploadID string, multipartList *block.MultipartUploadCompletion) (*string, int64, error) {
 
 	lmop, err := l.client.Objects().ListMultipartUploadParts(ctx, &storage.ListMpuPartsInput{Id: l.translateUploadIDToMantaFormat(uploadID)})
+	if err != nil {
+		return nil, -1, err
+	}
 	var parts []string
 	var size int64
 	for _, es := range lmop.Parts {
 		parts = append(parts, es.ETag)
 		size = size + es.Size
 	}
-	fmt.Println("error is", err)
-	cob := storage.CommitMpuBody{Parts: parts}
-	err = l.client.Objects().CommitMultipartUpload(ctx, &storage.CommitMpuInput{Id: uploadID, Body: cob})
 
-	etag := computeETag(multipartList.Part) + "-" + strconv.Itoa(len(multipartList.Part))
-	fmt.Println("error is", err)
-	return &etag, size, nil
+	cob := storage.CommitMpuBody{Parts: parts}
+	err = l.client.Objects().CommitMultipartUpload(ctx, &storage.CommitMpuInput{Id: l.translateUploadIDToMantaFormat(uploadID), Body: cob})
+
+	op, err := l.GetMultiPartUpload(ctx, l.translateUploadIDToMantaFormat(uploadID))
+	if err != nil {
+		return nil, -1, err
+
+	}
+
+	output, err := l.client.Objects().Get(ctx, &storage.GetObjectInput{ObjectPath: op.TargetObject})
+
+	return &output.ETag, size, err
 }
 
-func computeETag(parts []*s3.CompletedPart) string {
-	var etagHex []string
-	for _, p := range parts {
-		e := *p.ETag
-		if strings.HasPrefix(e, "\"") && strings.HasSuffix(e, "\"") {
-			e = e[1 : len(e)-1]
-		}
-		etagHex = append(etagHex, e)
-	}
-	s := strings.Join(etagHex, "")
-	b, _ := hex.DecodeString(s)
-	md5res := md5.Sum(b) //nolint:gosec
-	csm := hex.EncodeToString(md5res[:])
-	return csm
+func (l *Adapter) GetMultiPartUpload(ctx context.Context, uploadID string) (*storage.GetMpuOutput, error) {
+	return l.client.Objects().GetMultipartUpload(ctx, &storage.GetMpuInput{PartsDirectoryPath: path.Join(l.accountName, "uploads", uploadID[:3], uploadID)})
+
 }
 
 func (l *Adapter) ValidateConfiguration(_ context.Context, _ string) error {

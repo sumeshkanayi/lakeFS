@@ -95,7 +95,7 @@ func buildLocalAdapter(params params.Local) (*local.Adapter, error) {
 }
 func buildMantaAdapter(params params.Manta) (*manta.Adapter, error) {
 	sc := manta.NewMantaClient(params)
-	adapter, err := manta.NewAdapter(sc)
+	adapter, err := manta.NewAdapter(sc, params.MantaUser)
 	if err != nil {
 		return nil, fmt.Errorf("got error opening a manta adapter with path %s: %w", params.MantaUrl, err)
 	}
