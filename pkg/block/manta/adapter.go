@@ -42,6 +42,7 @@ var (
 	ErrInventoryNotSupported = errors.New("inventory feature not implemented for local storage adapter")
 	ErrInvalidUploadIDFormat = errors.New("invalid upload id format")
 	ErrBadPath               = errors.New("bad path traversal blocked")
+	ErrFinalizedMultiPart    = errors.New("cannot upload to a finalized multipart")
 )
 
 /*
@@ -52,11 +53,34 @@ func WithTranslator(t block.UploadIDTranslator) func(a *Adapter) {
 }
 */
 
+type MultiPartIDTranslator struct {
+}
+
+func (m MultiPartIDTranslator) SetUploadID(uploadID string) string {
+
+	return strings.ReplaceAll(uploadID, "-", "")
+
+}
+func (m MultiPartIDTranslator) TranslateUploadID(simulationID string) string {
+	var outputStringArray []string
+	pathMetadata := regexp.MustCompile(mantaUploadIDRegex)
+	matches := pathMetadata.FindStringSubmatch(simulationID)
+
+	for index := 1; index < len(matches); index++ {
+		outputStringArray = append(outputStringArray, matches[index])
+
+	}
+	return strings.Join(outputStringArray, "-")
+}
+func (m MultiPartIDTranslator) RemoveUploadID(inputUploadID string) {
+
+}
+
 func NewAdapter(sc *storage.StorageClient, accountName string, opts ...func(a *Adapter)) (*Adapter, error) {
 
 	adapter := &Adapter{
 		client:             sc,
-		uploadIDTranslator: &block.NoOpTranslator{},
+		uploadIDTranslator: MultiPartIDTranslator{},
 		accountName:        accountName,
 	}
 	for _, opt := range opts {
@@ -138,23 +162,28 @@ func (l *Adapter) Get(ctx context.Context, obj block.ObjectPointer, size int64) 
 	bucketPathFromStorageNameSpace := strings.ReplaceAll(obj.StorageNamespace, "manta://", "")
 	objectPath := path.Join(defaultMantaRoot, bucketPathFromStorageNameSpace, obj.Identifier)
 	output, err := l.client.Objects().Get(ctx, &storage.GetObjectInput{ObjectPath: objectPath})
-	output.ContentLength = uint64(size)
+	//output.ContentLength = uint64(size)
 	return output.ObjectReader, err
 
 }
 
 func (l *Adapter) Walk(_ context.Context, walkOpt block.WalkOpts, walkFn block.WalkFunc) error {
-	p := filepath.Clean(path.Join("/tmp", walkOpt.StorageNamespace, walkOpt.Prefix))
-	return filepath.Walk(p, func(path string, info os.FileInfo, err error) error {
-		if err != nil {
-			return err
-		}
+	fmt.Println("WALKING...", walkOpt.Prefix, walkOpt.StorageNamespace)
+	/*
+		p := filepath.Clean(path.Join("/tmp", walkOpt.StorageNamespace, walkOpt.Prefix))
+		return filepath.Walk(p, func(path string, info os.FileInfo, err error) error {
+			if err != nil {
+				return err
+			}
 
-		return walkFn(p)
-	})
+			return walkFn(p)
+		})
+	*/
+	return nil
 }
 
 func (l *Adapter) Exists(ctx context.Context, obj block.ObjectPointer) (bool, error) {
+	fmt.Println("EXISTS.....")
 	bucketPathFromStorageNameSpace := strings.ReplaceAll(obj.StorageNamespace, "manta://", "")
 	objectPath := path.Join(defaultMantaRoot, bucketPathFromStorageNameSpace, obj.Identifier)
 
@@ -167,6 +196,7 @@ func (l *Adapter) Exists(ctx context.Context, obj block.ObjectPointer) (bool, er
 }
 
 func (l *Adapter) GetRange(_ context.Context, obj block.ObjectPointer, start int64, end int64) (io.ReadCloser, error) {
+	fmt.Println("GET RANGE")
 	p := "/tmp/test.txt"
 	f, err := os.Open(filepath.Clean(p))
 	if err != nil {
@@ -182,6 +212,7 @@ func (l *Adapter) GetRange(_ context.Context, obj block.ObjectPointer, start int
 }
 
 func (l *Adapter) GetProperties(ctx context.Context, obj block.ObjectPointer) (block.Properties, error) {
+	fmt.Println("GET PROPERTIES CALLED...")
 	objectPathFromStorageNameSpace := strings.ReplaceAll(obj.StorageNamespace, "manta://", "")
 	objectPathWithBucket := path.Join(defaultMantaRoot, objectPathFromStorageNameSpace, obj.Identifier)
 	_, err := l.client.Objects().GetInfo(ctx, &storage.GetInfoInput{ObjectPath: objectPathWithBucket})
@@ -228,21 +259,34 @@ func (l *Adapter) CreateMultiPartUpload(ctx context.Context, obj block.ObjectPoi
 }
 
 func (l *Adapter) UploadPart(ctx context.Context, obj block.ObjectPointer, _ int64, reader io.Reader, uploadID string, partNumber int64) (string, error) {
+	uploadPart, err := l.GetMultiPartUpload(ctx, l.translateUploadIDToMantaFormat(uploadID))
 
 	if err := isValidUploadID(uploadID); err != nil {
 		return "", err
+	}
+	if uploadPart.State == "done" {
+		return "", ErrFinalizedMultiPart
 	}
 
 	//md5Read := block.NewHashingReader(reader, block.HashFunctionMD5)
 
 	lp, err := l.client.Objects().UploadPart(ctx, &storage.UploadPartInput{Id: l.translateUploadIDToMantaFormat(uploadID), PartNum: uint64(partNumber), ObjectReader: reader})
 
+	if err != nil {
+		return "", err
+	}
 	return lp.Part, err
 }
 
 func (l *Adapter) AbortMultiPartUpload(ctx context.Context, obj block.ObjectPointer, uploadID string) error {
 
-	return l.client.Objects().AbortMultipartUpload(ctx, &storage.AbortMpuInput{PartsDirectoryPath: path.Join(l.accountName, "uploads", uploadID[:3], uploadID)})
+	err := l.client.Objects().AbortMultipartUpload(ctx, &storage.AbortMpuInput{PartsDirectoryPath: path.Join(l.accountName, "uploads", uploadID[:3], l.translateUploadIDToMantaFormat(uploadID))})
+
+	if err != nil {
+		return err
+	}
+	l.uploadIDTranslator.RemoveUploadID(uploadID)
+	return nil
 
 }
 
@@ -269,6 +313,10 @@ func (l *Adapter) CompleteMultiPartUpload(ctx context.Context, obj block.ObjectP
 	}
 
 	output, err := l.client.Objects().Get(ctx, &storage.GetObjectInput{ObjectPath: op.TargetObject})
+	if err != nil {
+		return nil, -1, err
+	}
+	l.uploadIDTranslator.RemoveUploadID(uploadID)
 
 	return &output.ETag, size, err
 }
