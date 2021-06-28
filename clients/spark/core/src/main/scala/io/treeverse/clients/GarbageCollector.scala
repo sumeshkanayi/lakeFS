@@ -1,14 +1,18 @@
 package io.treeverse.clients
 
 import com.google.protobuf.timestamp.Timestamp
-import io.treeverse.clients.LakeFSContext.{
-  LAKEFS_CONF_API_ACCESS_KEY_KEY,
-  LAKEFS_CONF_API_SECRET_KEY_KEY,
-  LAKEFS_CONF_API_URL_KEY
-}
+import io.treeverse.clients.LakeFSContext.{LAKEFS_CONF_API_ACCESS_KEY_KEY, LAKEFS_CONF_API_SECRET_KEY_KEY, LAKEFS_CONF_API_URL_KEY}
 import org.apache.hadoop.conf.Configuration
+import org.apache.spark.sql.expressions.Window
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.{SparkSession, _}
+import software.amazon.awssdk.services.s3.S3Client
+import software.amazon.awssdk.services.s3.model.{Delete, DeleteObjectsRequest, ObjectIdentifier}
+
+import collection.JavaConverters._
+import scala.collection.mutable
+
+
 
 object GarbageCollector {
 
@@ -227,6 +231,66 @@ object GarbageCollector {
                                                spark,
                                                APIConfigurations(apiURL, accessKey, secretKey)
                                               ).withColumn("run_id", lit(runID))
-    expiredAddresses.write.partitionBy("run_id").mode(SaveMode.Append).parquet(addressesDFLocation)
+    expiredAddresses.write.partitionBy("run_id").mode(SaveMode.Append).parquet(addressesDFLocation) // TODO(Guys): consider changing to overwrite
+  }
+}
+
+object S3BulkDeleter {
+
+  // collectByPartitionAndSize, for given column of type X return Lists[X] of size up to maxSize for rows within partition
+  def collectByPartitionAndSize(df: DataFrame, maxSize: Int, column: String) = {
+    val nRows = df.count()
+    val maxNRowsPartition = maxSize //make sure its a multiple of desired array length
+    val nPartitions = math.max(1, math.floor(nRows / maxNRowsPartition)).toInt
+    val repartitioned = df
+      .repartitionByRange(nPartitions, col(column).desc)
+      .withColumn("partitionId", spark_partition_id())
+
+    val w = Window.partitionBy(col("partitionId")).orderBy(column)
+    repartitioned
+      .withColumn("g", floor((lit(-1) + row_number().over(w)) / lit(maxSize)))
+      .groupBy("partitionId", "g")
+      .agg(collect_list(column).alias(column + "s"))
+      .select(column + "s")
+  }
+
+  def delObjIteration(bucket: String, keys: Seq[String]) = {
+    if (keys.isEmpty) None
+    val removeKeys = keys.map(ObjectIdentifier.builder().key(_).build()).asJava
+    import software.amazon.awssdk.regions.Region
+
+    val region = Region.US_EAST_1 // TODO(Guys): change this
+    val s3 = S3Client.builder.region(region).build
+    val delObj = Delete.builder().objects(removeKeys).build()
+    val delObjReq = DeleteObjectsRequest.builder.delete(delObj).bucket(bucket).build()
+    val res = s3.deleteObjects(delObjReq)
+    res.deleted().asScala.map(_.key())
+  }
+  def bulkRemove(readKeysDF: DataFrame, bulkSize: Int, spark: SparkSession, repo: String): Dataset[mutable.Buffer[String]] = {
+    import spark.implicits._
+    val bulkedKeys = collectByPartitionAndSize(readKeysDF, bulkSize, "key")
+    bulkedKeys.map(x => delObjIteration(repo, x.getList[String](0).asScala))
+  }
+
+  def main(args: Array[String]): Unit = {
+    if (args.length != 4) {
+      Console.err.println(
+        "Usage: ... <repo_name> <runID> s3://storageNamespace/prepared_commits_table s3://storageNamespace/output_destination_table"
+      )
+      System.exit(1)
+    }
+    val MaxBulkSize = 1000
+    val repo = args(0)
+    val runID = args(1)
+    val addressesDFLocation = args(2)
+    val deletedAddressesDFLocation = args(3)
+    val spark = SparkSession.builder().getOrCreate()
+    val df = spark.read.parquet(addressesDFLocation).where(col("run_id") === runID)
+    val res = bulkRemove(df, MaxBulkSize, spark, repo)
+    res.withColumn("run_id", lit(runID))
+      .write
+      .partitionBy("run_id")
+      .mode(SaveMode.Append)
+      .parquet(deletedAddressesDFLocation)
   }
 }
