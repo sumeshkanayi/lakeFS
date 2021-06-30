@@ -40,10 +40,8 @@ type Adapter struct {
 }
 
 var (
-	ErrPathNotWritable       = errors.New("path provided is not writable")
-	ErrInventoryNotSupported = errors.New("inventory feature not implemented for local storage adapter")
+	ErrInventoryNotSupported = errors.New("inventory feature not implemented for mantastorage adapter")
 	ErrInvalidUploadIDFormat = errors.New("invalid upload id format")
-	ErrBadPath               = errors.New("bad path traversal blocked")
 	ErrFinalizedMultiPart    = errors.New("cannot upload to a finalized multipart")
 )
 
@@ -104,11 +102,14 @@ func resolveNamespace(obj block.ObjectPointer) (block.QualifiedKey, error) {
 }
 
 func (l *Adapter) Put(ctx context.Context, obj block.ObjectPointer, size int64, reader io.Reader, _ block.PutOpts) error {
+
 	var err error
+
 	defer reportMetrics("Put", time.Now(), &size, &err)
 
 	_, err = resolveNamespace(obj)
 	if err != nil {
+
 		return err
 	}
 
@@ -166,7 +167,6 @@ func (l *Adapter) UploadCopyPartRange(ctx context.Context, sourceObj, destinatio
 }
 
 func (l *Adapter) Get(ctx context.Context, obj block.ObjectPointer, size int64) (reader io.ReadCloser, err error) {
-
 	defer reportMetrics("Get", time.Now(), &size, &err)
 	output, err := l.client.Objects().Get(ctx, &storage.GetObjectInput{ObjectPath: l.translateToMantaPath(obj)})
 	//output.ContentLength = uint64(size)
@@ -176,11 +176,53 @@ func (l *Adapter) Get(ctx context.Context, obj block.ObjectPointer, size int64) 
 
 func (l *Adapter) Walk(ctx context.Context, walkOpt block.WalkOpts, walkFn block.WalkFunc) error {
 	var err error
+	log := l.log(ctx).WithField("operation", "Walk")
+	pathBase := path.Base(walkOpt.Prefix)
 	defer reportMetrics("Walk", time.Now(), nil, &err)
-	fmt.Println("WALKING...", walkOpt.Prefix, walkOpt.StorageNamespace)
-	//WALKING... _lakefs manta://demo1
+	bucketPath := strings.ReplaceAll(walkOpt.StorageNamespace, "manta://", "")
+	var dirName string
+	if pathDir := path.Dir(walkOpt.Prefix); pathDir == "." {
+
+		dirName = path.Join(defaultMantaRoot, bucketPath)
+	} else {
+		dirName = path.Join(defaultMantaRoot, bucketPath, pathDir)
+	}
+
+	input := &storage.ListDirectoryInput{
+		DirectoryName: dirName,
+	}
+	objs, err := l.client.Dir().List(ctx, input)
+	if err != nil {
+		log.WithError(err).
+			WithField("input", input.DirectoryName).
+			Error(err)
+		return err
+	}
+
+	for _, obj := range objs.Entries {
+
+		// If the base name of our prefix was found to be of type "directory"
+		// than we need to pull the directory entries for that instead.
+
+		if err := walkFn(obj.Name); err != nil {
+			return err
+		}
+
+		if obj.Name == pathBase && obj.Type == "directory" {
+			input.DirectoryName = path.Join(defaultMantaRoot, bucketPath, walkOpt.Prefix)
+			objs, err = l.client.Dir().List(ctx, input)
+			if err != nil {
+				log.WithError(err).
+					WithField("input", input.DirectoryName).
+					Error(err)
+				return err
+			}
+
+		}
+	}
 
 	return nil
+
 }
 
 func (l *Adapter) Exists(ctx context.Context, obj block.ObjectPointer) (bool, error) {
@@ -202,8 +244,13 @@ func (l *Adapter) GetRange(ctx context.Context, obj block.ObjectPointer, start i
 	output, err := l.client.Objects().Get(ctx, &storage.GetObjectInput{
 		ObjectPath: l.translateToMantaPath(obj),
 	})
-	fmt.Println(err)
+	if err != nil {
+		return nil, err
+	}
 	_, err = io.CopyN(io.Discard, output.ObjectReader, start)
+	if err != nil {
+		return nil, err
+	}
 
 	return &struct {
 		io.Reader
@@ -419,4 +466,9 @@ func NewMantaClient(mantaConfig params.Manta) *storage.StorageClient {
 func formatMultipartFilename(uploadID string, partNumber int64) string {
 	// keep natural sort order with zero padding
 	return fmt.Sprintf("%s"+partSuffix+"%05d", uploadID, partNumber)
+
+}
+
+func (a *Adapter) log(ctx context.Context) logging.Logger {
+	return logging.FromContext(ctx)
 }

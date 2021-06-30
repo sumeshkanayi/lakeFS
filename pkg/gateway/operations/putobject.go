@@ -70,6 +70,7 @@ func extractEntryFromCopyReq(w http.ResponseWriter, req *http.Request, o *PathOp
 func handleCopy(w http.ResponseWriter, req *http.Request, o *PathOperation, copySource string) {
 	o.Incr("copy_object")
 	ent := extractEntryFromCopyReq(w, req, o, copySource)
+
 	if ent == nil {
 		return // operation already failed
 	}
